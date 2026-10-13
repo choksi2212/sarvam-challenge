@@ -64,11 +64,27 @@ log = logging.getLogger("bhashabuzzer.main")
 # factories. Tests replace the factory functions themselves (DI).
 # --------------------------------------------------------------------------
 def _sibling(name: str) -> Any:
-    """Import a sibling backend module lazily: flat first, then package."""
+    """Import a sibling backend module lazily.
+
+    Flat-first is kept for TEST injection (A7's tests put file-backed fake
+    modules into sys.modules under flat names), BUT a flat import that
+    resolves to a *namespace package* (a runtime data directory such as
+    ``cache/`` — ``__file__`` is None) is skipped in favour of the real
+    ``backend.<name>`` module. Found live in the e2e smoke.
+    """
+    flat = None
     try:
-        return importlib.import_module(name)
+        flat = importlib.import_module(name)
     except ImportError:
+        pass
+    if flat is not None and getattr(flat, "__file__", None) is not None:
+        return flat
+    try:
         return importlib.import_module(f"backend.{name}")
+    except ImportError:
+        if flat is not None:
+            return flat
+        raise
 
 
 def get_tts_module() -> Any:
@@ -102,7 +118,7 @@ def make_voice_channel() -> Any:
     channel_cls = getattr(tts, "VoiceChannel", None)
     if channel_cls is None:  # pragma: no cover — defensive
         raise RuntimeError("sarvam_tts.VoiceChannel not found")
-    return channel_cls(ws_url=config.TTS_WS_URL, api_key=None)  # key read by A1 itself
+    return channel_cls(ws_url=config.TTS_WS_URL, api_key=config.SARVAM_API_KEY)  # lazy: env var → ../.env (A1 only reads arg/env)
 
 
 def make_game_session(send: Callable[[dict], Any], voice: Any, judge_fn: Any, bank: dict) -> Any:
@@ -430,6 +446,20 @@ class LadderVoice:
 # FastAPI app
 # --------------------------------------------------------------------------
 app = FastAPI(title="BhashaBuzzer relay")
+
+
+@app.on_event("startup")
+async def _boot_configure() -> None:
+    """Point the cache/logs at config paths BEFORE any synthesis (A2 seam).
+
+    Defensive: test-injected fake cache modules may not implement
+    ``configure`` — skip silently in that case (tests configure their own
+    tmp dirs).
+    """
+    cfg = get_cache_module()
+    fn = getattr(cfg, "configure", None)
+    if callable(fn):
+        fn(cache_dir=config.CACHE_DIR, logs_dir=config.LOGS_DIR)
 
 
 @app.get("/")
