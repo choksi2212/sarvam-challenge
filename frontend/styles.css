@@ -667,6 +667,11 @@ body:has(#type-fallback:not([hidden])) #persona-lower-third { display: none; }
   #persona-name { font-size: 20px; }
   #persona-id { font-size: 10px; max-width: 24ch; }
 }
+@media (max-width: 480px) {
+  /* keep every chip on-stage: drop wordy labels, wrap the ticker to 2 rows */
+  .score-label, .combo-label { display: none; }
+  .latency-ticker { flex-wrap: wrap; row-gap: 6px; }
+}
 
 /* ------------------- 17 · Motion + contrast preferences ------------------- */
 @media (prefers-reduced-motion: reduce) {
