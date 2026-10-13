@@ -84,7 +84,8 @@ export class GameWS {
     let ws;
     try {
       const Ctor = this._wsFactory ?? WebSocket;
-      ws = new Ctor(this.url);
+      // factory: plain call (may return an instance); default: construct the global
+      ws = this._wsFactory ? this._wsFactory(this.url) : new Ctor(this.url);
     } catch (err) {
       this._fail(err);
       return;

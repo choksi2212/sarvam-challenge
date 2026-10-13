@@ -16,9 +16,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import wsPkg from 'ws';
-
-const { WebSocketServer } = wsPkg;
+import { WebSocketServer } from 'ws';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const WORKTREE_ROOT = path.resolve(HERE, '..');
@@ -157,7 +155,7 @@ async function speak(s, { caption, text = '', utteranceMs, e2eFields = null }) {
     const n = Math.min(chunkSamples, totalSamples - sent);
     send(s, { type: 'audio_chunk', utterance_id: id, b64: b64(Buffer.alloc(n * 2)) }); // silence
     sent += n;
-    await sleep(chunkInterval);
+    if (sent < totalSamples) await sleep(chunkInterval);
   }
   if (s.epoch !== epoch || s.sock.readyState !== 1) return id;
   send(s, {
@@ -259,8 +257,17 @@ async function handle(s, msg) {
     case 'start': {
       s.name = String(msg.player_name ?? 'प्रतियोगी').slice(0, 20) || 'प्रतियोगी';
       s.language = ['hi', 'enhi', 'en', 'mr'].includes(msg.language) ? msg.language : 'enhi';
-      if (s.started) {
-        // reconnect re-`start`: re-join the CURRENT spot instead of resetting the match
+      // reconnect re-`start`: re-join the CURRENT spot (snapshot by name) instead of
+      // resetting the match — the same semantics GameWS gives the real backend.
+      const prev = s.byName ? s.byName.get(s.name) : null;
+      if (s.started || (prev && prev.started)) {
+        if (!s.started && prev) {
+          Object.assign(s, {
+            qIdx: prev.qIdx, score: prev.score, streak: prev.streak,
+            answerCount: prev.answerCount, phase: prev.phase, lastHeard: prev.lastHeard,
+            started: true,
+          });
+        }
         s.epoch += 1;
         send(s, stateFrame(s));
         if (s.phase === 'question') {
@@ -365,16 +372,28 @@ export function createMockServer({ port = 8080, staticRoot = WORKTREE_ROOT, utte
   const wss = new WebSocketServer({ server, path: '/ws' });
 
   const sessions = new Set();
+  const byName = new Map(); // rejoin snapshots: player_name → last state (dev mock)
 
   wss.on('connection', (sock) => {
     const s = newSession(sock, opts);
+    s.byName = byName;
     sessions.add(s);
     sock.on('message', (data) => {
       let msg;
       try { msg = JSON.parse(String(data)); } catch { return; }
       Promise.resolve(handle(s, msg)).catch((err) => console.error('[mock] handler error:', err));
     });
-    sock.on('close', () => { s.epoch += 1; clearTimeout(s.answerTimeout); sessions.delete(s); });
+    sock.on('close', () => {
+      s.epoch += 1;
+      clearTimeout(s.answerTimeout);
+      if (s.started) {
+        byName.set(s.name, {
+          qIdx: s.qIdx, score: s.score, streak: s.streak, answerCount: s.answerCount,
+          phase: s.phase, lastHeard: s.lastHeard, started: true,
+        });
+      }
+      sessions.delete(s);
+    });
     sock.on('error', () => {});
   });
 

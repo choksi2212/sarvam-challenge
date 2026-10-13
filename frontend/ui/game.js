@@ -132,8 +132,9 @@ export function speedBonusText(reactionMs) {
 export const LATENCY_LABELS = { host: 'HOST VOICE', loop: 'YOU → HOST', server: 'SERVER TTFB' };
 export const LATENCY_EL_IDS = { host: 'lat-host', loop: 'lat-loop', server: 'lat-server' };
 
-/** 212 → "212 ms", 3240 → "3.2 s", missing → "—". */
+/** 212 → "212 ms", 3240 → "3.2 s", missing/invalid → "—". */
 export function formatMs(ms, { dash = '—' } = {}) {
+  if (ms === null || ms === undefined || ms === '') return dash; // Number(null) is 0, not NaN
   const v = Number(ms);
   if (!Number.isFinite(v) || v < 0) return dash;
   if (v < 1000) return `${Math.round(v)} ms`;
