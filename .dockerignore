@@ -1,0 +1,12 @@
+.git
+.env
+.gitignore
+research/
+worktrees/
+**/node_modules/
+**/__pycache__/
+cache/
+logs/
+dev-tools/
+scripts/
+*.md

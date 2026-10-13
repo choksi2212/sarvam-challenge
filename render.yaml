@@ -1,0 +1,16 @@
+# Render.com deployment (hot-fallback host; primary = VPS)
+# WS-holding FastAPI service — NOT serverless. Kept warm via UptimeRobot pings to /healthz.
+services:
+  - type: web
+    name: bhashabuzzer
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: SARVAM_API_KEY
+        sync: false # set in dashboard — never in the repo
+      - key: BHASHA_CACHE_DIR
+        value: /tmp/bb-cache
+      - key: PYTHONUNBUFFERED
+        value: "1"
