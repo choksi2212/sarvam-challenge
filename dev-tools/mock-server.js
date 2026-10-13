@@ -415,7 +415,13 @@ export function createMockServer({ port = 8080, staticRoot = WORKTREE_ROOT, utte
 const invoked = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : '';
 if (invoked === import.meta.url) {
   const port = Number(process.env.PORT ?? 8080);
-  const mock = createMockServer({ port });
+  // dev knobs for faster/slower rehearsal: MOCK_UTT_MS, MOCK_JUDGING_MS, MOCK_BEAT_MS
+  const mock = createMockServer({
+    port,
+    utteranceMs: Number(process.env.MOCK_UTT_MS ?? 2000),
+    judgingMs: Number(process.env.MOCK_JUDGING_MS ?? 1000),
+    beatMs: Number(process.env.MOCK_BEAT_MS ?? 800),
+  });
   mock.start().then((actual) => {
     console.log(`BhashaBuzzer mock backend`);
     console.log(`  static : http://localhost:${actual}/  (worktree root)`);
