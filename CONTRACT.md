@@ -85,10 +85,13 @@ async def transcribe_answer(wav_bytes: bytes, keyterms: list[str] | None = None)
 # backend/judge.py  (A4 owns)
 async def judge_answer(question: dict, heard: str, persona_label: str) -> dict
     # {"verdict": "correct|wrong|partial|unclear", "close_call": bool, "template_id": str, "hype_line": str}
-    # sarvam-105b /v1/chat/completions, response_format json_schema STRICT (see §4 judge params), temp 0.2
-    # ladder: strict schema → json_object → tolerant parse → string_match_fallback(question, heard)
-def normalize_answer(text: str) -> str   # strip fillers/honorifics; fold Indian↔western commas; Devanagari numerals→ASCII; word-numbers→digits (aik→1 etc.); lowercase latin
-def string_match_fallback(question: dict, heard: str) -> dict
+    # PRIMARY: sarvam-105b-conversations, reasoning_effort="low", temperature 0.2, max_tokens=300,
+    #          NO response_format (plain JSON-in-prompt), HARD CLIENT TIMEOUT 2.5 s   [PROBED: 450 ms, clean JSON]
+    # LADDER: LLM (2.5 s cap) → deterministic_verdict(question, heard)  — the game NEVER blocks on the LLM
+def normalize_answer(text: str) -> str   # strip fillers/honorifics; fold Indian↔western commas; Devanagari numerals→ASCII; word-numbers→digits; lowercase latin
+def deterministic_verdict(question: dict, heard: str) -> dict
+    # stdlib-only instant engine: normalize + alias exact-match → correct; difflib ratio ≥0.80 → partial(+close_call);
+    # ratio ≥0.60 → wrong(+close_call); blank/garbage → unclear; else wrong
 
 # backend/personas.py  (A5 owns)
 TEMPLATE_IDS = ["correct_fast","correct_confident","correct_slow","wrong_confident","wrong_funny","wrong_close",
@@ -125,7 +128,7 @@ class GameSession:
 - Pronunciation dict: created `p_8eea3524` (hi-IN), accepted with v4-flash. Pass `dict_id` in WS config when used.
 - STT: `saaras:v4` + `mode="codemix"` + `language_code="unknown"` + `keyterms` JSON-string → 200, transcript + detected language_code + probability. 22.05 kHz WAV accepted; client sends 16 kHz mono.
 - HTTP stream: 200 `audio/mpeg` default codec — **always set `output_audio_codec:"wav"` explicitly**.
-- Chat judge: `sarvam-105b` **is a reasoning model** — `max_tokens=120` burned out mid-reasoning (`finish_reason:"length"`, `content:null`) at 905 ms. **Judge params: `max_tokens=2000`, `reasoning_effort="low"`, `response_format=json_schema strict`** (re-verified at integration; if `content` still null → raise `max_tokens` to 4000 or drop `reasoning_effort`).
+- Chat judge **[PROBED ×2]**: `sarvam-105b` on /v1/chat/completions ALWAYS reasons (`finish_reason:"length"`, `content:null` even at max_tokens=4000 / 20 s) — DO NOT USE live. **`sarvam-105b-conversations` + `reasoning_effort:"low"` answers in ~450 ms with clean JSON + Hinglish banter — this is the judge.** No response_format needed; JSON-in-prompt; max_tokens=300; 2.5 s hard client timeout → deterministic_verdict fallback. Only these two models exist on our tier (/v1/models).
 - Everywhere: `model` explicit, `enable_preprocessing:true`, numbers >4 digits comma-grouped, `wav` @24 kHz, mono.
 - Speaker IDs: lowercase, from `data/personas.json` ONLY (all verified against the live 224-ID roster).
 
