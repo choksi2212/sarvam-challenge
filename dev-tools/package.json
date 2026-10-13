@@ -1,0 +1,13 @@
+{
+  "name": "bhashabuzzer-dev-tools",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "BhashaBuzzer dev-only mock backend (NOT deployed) — dev-tools are excluded from the FastAPI deploy.",
+  "scripts": {
+    "mock": "node mock-server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
