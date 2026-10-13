@@ -454,11 +454,19 @@ class TestVoiceChannelProtocol(VoiceChannelTestBase):
         pings = [m for m in server.received[0] if m.get("type") == "ping"]
         self.assertGreaterEqual(len(pings), 2, "keepalive task must ping periodically")
         self.assertTrue(ch.connected)
-        before = len(pings)
+
+    async def test_public_ping_sends_one_frame(self):
+        server, url = await self.start_server()
+        ch = self.make_channel(url, ping_interval=999.0)  # no periodic drift
+        await ch.set_speaker(SPEAKER_A, "hi-IN")
+        await asyncio.sleep(0.1)  # let the server settle after set_speaker
+        before = len([m for m in server.received[0] if m.get("type") == "ping"])
+        self.assertEqual(before, 0)
         await ch.ping()  # public one-shot ping
         await asyncio.sleep(0.1)  # let the same-loop server handler record the frame
         pings = [m for m in server.received[0] if m.get("type") == "ping"]
-        self.assertEqual(len(pings), before + 1)
+        self.assertEqual(len(pings), 1)
+        self.assertEqual(ch.ping_count, 1)
 
     async def test_speak_error_frame_raises_ttswserror(self):
         server, url = await self.start_server(
