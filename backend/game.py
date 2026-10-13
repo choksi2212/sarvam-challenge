@@ -474,6 +474,12 @@ class GameSession:
         # Flows are sequential and phase-guarded; only a fresh start/teardown cancels one.
         task = asyncio.create_task(self._guard(coro))
         self._flow_task = task
+
+        def _close_if_never_started(_task: asyncio.Task, coro: Any = coro) -> None:
+            if coro.cr_frame is not None:                 # cancelled before first step
+                coro.close()                              # silence "never awaited"
+
+        task.add_done_callback(_close_if_never_started)
         return task
 
     async def _guard(self, coro: Any) -> None:
@@ -495,8 +501,14 @@ class GameSession:
 
     def _clear_timer(self) -> None:
         # Never cancel ourselves: timeout callbacks run inside the timer task.
-        if self._timer is not None and self._timer is not asyncio.current_task():
-            self._timer.cancel()
+        # (Teardown may also run outside any event loop — e.g. WS close handlers.)
+        if self._timer is not None:
+            try:
+                current = asyncio.current_task()
+            except RuntimeError:
+                current = None
+            if current is not self._timer:
+                self._timer.cancel()
         self._timer = None
 
     async def _timer_flow(self, delay: float, cb: Callable[[], Any]) -> None:
@@ -558,10 +570,11 @@ class GameSession:
         await self._speak(q["question_text"])
         # A buzz/timeout may have barged in mid-speech; nothing more to arm here.
 
-    async def _wait_speech_settled(self, timeout_s: float = 1.0) -> None:
-        """Let a barged in-flight utterance finish emitting its audio_end."""
-        deadline = time.monotonic() + timeout_s
-        while self._active is not None and time.monotonic() < deadline:
+    async def _wait_speech_settled(self, max_polls: int = 500) -> None:
+        """Let a barged in-flight utterance finish emitting its audio_end (bounded polls)."""
+        for _ in range(max_polls):
+            if self._active is None:
+                return
             await asyncio.sleep(0.002)
 
     async def _advance_after(self, react: Optional[tuple[str, str]] = None) -> None:
