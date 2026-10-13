@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+cache/
+logs/
+node_modules/
+*.wav
+*.mp3
+spend-log.md
