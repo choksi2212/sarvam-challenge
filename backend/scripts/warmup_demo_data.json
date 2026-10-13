@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "BhashaBuzzer warmup — demo-path mock manifest (dry-run source of truth)",
+    "generated": "2026-10-13",
+    "owner": "A2 (cache warmup) — CONTRACT §3 cache block, backend-plan §5.3, game-design §4",
+    "note": "Committed mock of the demo path. `warmup.py --dry-run` prints its render list from THIS file with zero Sarvam API calls and zero sibling imports (CONTRACT §8: never run live during build). The --live path (orchestrator only) re-derives structure from backend.personas + backend.data and prefers their texts over these fallbacks.",
+    "tts_model": "bulbul:v4-flash",
+    "sample_rate": 24000,
+    "codec": "wav",
+    "language": "hi-IN"
+  },
+  "pricing": {
+    "rs_per_10k_chars": 20.0,
+    "currency": "INR",
+    "basis": "ops-plan §4: probed ₹0.014 for 7 chars → ₹0.002/char (bulbul:v4-flash launch price)"
+  },
+  "personas": {
+    "ratan_hi_customer_expressive":   {"label": "Ratan — Quizmaster",      "style_tag": "expressive", "language_code": "hi-IN", "pace": 1.0},
+    "ishita_enhi_customer_expressive": {"label": "Ishita — Teasing Co-host", "style_tag": "expressive", "language_code": "hi-IN", "pace": 1.05},
+    "ratan_hi_sports":                 {"label": "Ratan — Stadium Host",    "style_tag": "sports",    "language_code": "hi-IN", "pace": 1.1},
+    "mukul_hi_suspense":               {"label": "Mukul — The Boss",        "style_tag": "suspense",  "language_code": "hi-IN", "pace": 0.95}
+  },
+  "template_personas": [
+    "ratan_hi_customer_expressive",
+    "ishita_enhi_customer_expressive",
+    "ratan_hi_sports",
+    "mukul_hi_suspense"
+  ],
+  "host_intro": {
+    "id": "host_intro",
+    "kind": "host_intro",
+    "speaker": "ratan_hi_customer_expressive",
+    "text": "नमस्ते भारत! तैयार हो जाओ — यह है BhashaBuzzer। कोई typing नहीं, कोई screen नहीं — सिर्फ़ आपकी आवाज़। सवाल बोले, जवाब बोलो, और जीतो — बोलो और जीतो! मैं हूँ आपका host, और आज की रात है मुक़ाबले की रात। तो, तैयार हो जाओ — तीन, दो, एक... शुरू!"
+  },
+  "rules": {
+    "id": "rules",
+    "kind": "rules",
+    "speaker": "ratan_hi_customer_expressive",
+    "text": "नियम आसान हैं। सवाल सुनो, बज्जर दबाओ, जवाब बोलो। जल्दी बोलोगे तो bonus अंक मिलेंगे, और लगातार सही जवाब score को दोगुना कर देंगे। चलो शुरू करें?"
+  },
+  "round_intros": [
+    {"id": "round_intro_r1", "kind": "round_intro", "round": 1, "speaker": "ratan_hi_customer_expressive", "text": "पहला राउंड — गरमा-गरम शुरुआत! सवाल आसान, जवाब तेज़ चाहिए। Best of luck!"},
+    {"id": "round_intro_r2", "kind": "round_intro", "round": 2, "speaker": "ishita_enhi_customer_expressive", "text": "राउंड दो — यहाँ चलेगी पूरी तेज़ Hinglish! मैं थोड़ी खिंचाई भी करूँगी, तो बुरा नहीं मानना!"},
+    {"id": "round_intro_r3", "kind": "round_intro", "round": 3, "speaker": "ratan_hi_sports", "text": "राउंड तीन — Stadium mode! अब सवाल नहीं, दंगल होगा। तैयार?"}
+  ],
+  "final_intro": {
+    "id": "final_intro",
+    "kind": "final_intro",
+    "speaker": "mukul_hi_suspense",
+    "text": "और अब... आख़िरी सवाल। Sudden death। सही जवाब — और मैच आपका। एक ग़लती... और host जीत गया। सोच, समझ कर बोलिए।"
+  },
+  "reaction_templates": [
+    {"id": "correct_fast",     "pace": 1.1,  "text": "वाह! बिजली की रफ़्तार! इसे कहते हैं सही जवाब, सही समय!"},
+    {"id": "correct_confident", "pace": 1.05, "text": "पूरा विश्वास, और जवाब भी बिल्कुल सही! ऐसी confidence के आगे host भी हार गया!"},
+    {"id": "correct_slow",     "pace": 1.0,  "text": "सही जवाब! पर अगली बार बज्जर ज़रा तेज़ दबाओ, ठीक है?"},
+    {"id": "wrong_confident",  "pace": 1.05, "text": "इतना confidence, और जवाब ग़लत? हाय राम! दिल दुखा दिया!"},
+    {"id": "wrong_funny",      "pace": 1.0,  "text": "यह जवाब सुनकर तो host हँस पड़ा! Comedy के अंक नहीं मिलते, पर मज़ा आया!"},
+    {"id": "wrong_close",      "pace": 1.0,  "text": "बहुत करीब था! बस एक अक्षर की चूक गए। सही जवाब सुन लो..."},
+    {"id": "partial",          "pace": 1.0,  "text": "आधा सही! आधी जीत भी जीत होती है। सही जवाब सुन लो..."},
+    {"id": "unclear",          "pace": 0.95, "text": "आवाज़ थोड़ी धुँधली आई — ज़रा साफ़-साफ़, mic के पास बोलिए!"},
+    {"id": "timeout",          "pace": 1.0,  "text": "समय समाप्त! घड़ी ने आज बज्जर को हरा दिया। सही जवाब था..."},
+    {"id": "no_answer",        "pace": 1.0,  "text": "जवाब नहीं आया? Mic ठीक है ना? चलो, अगले सवाल में धमाका करो!"},
+    {"id": "repeat_request",   "pace": 0.95, "text": "ज़रा साफ़-साफ़ बोलिए, एक बार फिर से!"},
+    {"id": "streak_3",         "pace": 1.15, "text": "तीन लगातार सही! यह अब luck नहीं — दम है!"},
+    {"id": "streak_5",         "pace": 1.15, "text": "पाँच का स्ट्रीक! Host को अब डर लगने लगा है!"},
+    {"id": "final_win",        "pace": 1.0,  "text": "Sudden death में भी धमाका! आज आप इस मैच के चैंपियन हैं। बधाई हो!"},
+    {"id": "final_lose",       "pace": 0.95, "text": "अरे नहीं! आख़िरी सवाल पर host आगे निकल गया। रीमैच की तारीख़?"},
+    {"id": "game_over",        "pace": 1.0,  "text": "यही हुआ आज का BhashaBuzzer! Score याद रखना — कल फिर आना। बोलो और जीतो!"}
+  ],
+  "demo_questions": [
+    {"id": "cricket-01", "kind": "question", "round": 1, "speaker": "ratan_hi_customer_expressive",   "language": "hi-IN", "text": "2011 के Cricket World Cup final में India की captain कौन थी?"},
+    {"id": "gk-05",      "kind": "question", "round": 1, "speaker": "ratan_hi_customer_expressive",   "language": "en-IN", "text": "On which date did the Constitution of India come into force?"},
+    {"id": "cricket-03", "kind": "question", "round": 2, "speaker": "ishita_enhi_customer_expressive", "language": "en-IN", "text": "In the 2007 T20 World Cup, how many sixes did Yuvraj Singh hit in a single over?"},
+    {"id": "math-12",    "kind": "question", "round": 2, "speaker": "ishita_enhi_customer_expressive", "language": "hi-IN", "text": "Cricket match में team को 12 balls में 24 runs चाहिए. हर ball पर average कितने runs चाहिए?"},
+    {"id": "sci-07",     "kind": "question", "round": 3, "speaker": "ratan_hi_sports",                 "language": "hi-IN", "text": "Light की speed लगभग कितने kilometres per second है?"},
+    {"id": "bolly-08",   "kind": "question", "round": 3, "speaker": "ratan_hi_sports",                 "language": "hi-IN", "text": "1957 की classic film 'Mother India' में lead role किस actress ने निभाई थी?"},
+    {"id": "gk-11",      "kind": "question", "round": 4, "speaker": "mukul_hi_suspense",             "language": "hi-IN", "text": "Chandrayaan-3 का lander Vikram moon की surface पर किस date पर उतरा था?"}
+  ],
+  "fun_facts": [
+    {"id": "fun_fact:cricket-01", "kind": "fun_fact", "question_id": "cricket-01", "round": 1, "speaker": "ratan_hi_customer_expressive",   "text": "Dhoni ने वो final खुद खत्म किया था — last over में six मारकर! आज भी हर cricket fan वो shot याद रखता है।"},
+    {"id": "fun_fact:gk-05",      "kind": "fun_fact", "question_id": "gk-05",      "round": 1, "speaker": "ratan_hi_customer_expressive",   "text": "इसी दिन India एक republic बना — इसलिए हर साल 26 January पर हम Republic Day मनाते हैं!"},
+    {"id": "fun_fact:cricket-03", "kind": "fun_fact", "question_id": "cricket-03", "round": 2, "speaker": "ishita_enhi_customer_expressive", "text": "Yuvraj ने England के Stuart Broad की over में छहों balls पर six मारा था — Durban में, 2007 में! एक over में 36 runs!"},
+    {"id": "fun_fact:math-12",    "kind": "fun_fact", "question_id": "math-12",    "round": 2, "speaker": "ishita_enhi_customer_expressive", "text": "Working: 24 ÷ 12 = 2 runs हर ball पर — यानी 12 per over! बस चौका-छक्का का combo बनाओ और match जीतो!"},
+    {"id": "fun_fact:sci-07",     "kind": "fun_fact", "question_id": "sci-07",     "round": 3, "speaker": "ratan_hi_sports",                 "text": "Light एक second में Earth के चक्कर 7 बार लगा सकती है! Sun से Earth तक भी लगभग 8 minutes लगते हैं।"},
+    {"id": "fun_fact:bolly-08",   "kind": "fun_fact", "question_id": "bolly-08",   "round": 3, "speaker": "ratan_hi_sports",                 "text": "Mother India Indian cinema की पहली film थी जिसे Oscar nomination मिला था — और Nargis का performance आज भी legend है!"},
+    {"id": "fun_fact:gk-11",      "kind": "fun_fact", "question_id": "gk-11",      "round": 4, "speaker": "mukul_hi_suspense",             "text": "उस दिन India moon के south pole के पास landing करने वाला दुनिया का पहला देश बना — और landing site का नाम 'Shiv Shakti' रखा गया!"}
+  ]
+}
