@@ -1,0 +1,1908 @@
+{
+ "meta": {
+  "title": "BhashaBuzzer question bank - authored draft v1",
+  "generated": "2026-10-13",
+  "author": "Planning Agent 3 (question bank design)",
+  "total_questions": 72,
+  "per_category": {
+   "Bollywood": 12,
+   "Cricket": 12,
+   "GK/Bharat": 12,
+   "Ganit": 12,
+   "Pop-culture/Tech": 12,
+   "Vigyan": 12
+  },
+  "difficulty_distribution": {
+   "1": 14,
+   "2": 31,
+   "3": 18,
+   "4": 6,
+   "5": 3
+  },
+  "language_distribution": {
+   "hi-IN": 43,
+   "en-IN": 22,
+   "mr-IN": 7
+  },
+  "language_target": "hi ~60% (Devanagari+Latin code-mixed), en ~30%, mr ~10%",
+  "showcase_preprocessing_question_ids": [
+   "cricket-01",
+   "cricket-03",
+   "cricket-05",
+   "cricket-06",
+   "cricket-12",
+   "gk-05",
+   "gk-09",
+   "gk-10",
+   "gk-11",
+   "math-04",
+   "math-06",
+   "math-12",
+   "sci-07",
+   "sci-09",
+   "sci-11",
+   "bolly-08"
+  ],
+  "tts_char_estimate": {
+   "question_text_total": 3716,
+   "fun_fact_line_total": 7385,
+   "full_playthrough": 11101,
+   "budget": "~50,000 chars; cache replays are free"
+  },
+  "schema": {
+   "id": "category-nn, unique",
+   "category": "Cricket | GK/Bharat | Ganit | Bollywood | Vigyan | Pop-culture/Tech",
+   "difficulty": "1 (kid-easy) to 5 (buff-only), skewed 2-3",
+   "question_text": "spoken by host via Bulbul TTS; <=200 chars; native-script code-mixing; numbers >4 digits comma-formatted; Devanagari sentences end with ? or !",
+   "expected_answer": "canonical short answer (1-4 words preferred, STT-friendly)",
+   "accepted_answer_aliases": "transliterations, Devanagari spellings, numeric variants, common misspellings",
+   "fun_fact_line": "host reads AFTER the verdict; Hinglish one-liner; for Ganit it shows the working",
+   "language": "Bulbul language_code for TTS: hi-IN | en-IN | mr-IN"
+  },
+  "fact_verification": "All non-trivial facts spot-verified via web search on 2026-10-13 (Naatu Naatu 2023 Oscar, Bhanu Athaiya 1983 first Indian Oscar, Musical.ly->TikTok 2018, Kapil Dev 175* vs Zimbabwe, Kangchenjunga 8,586 m, Statue of Unity 182 m). Timeless facts from stable common knowledge. No current-champion/CEO-style volatile questions.",
+  "imported_from": "research/plans/questions-draft.json",
+  "imported_by": "A6 game engine",
+  "validated_fields": [
+   "id",
+   "category",
+   "difficulty",
+   "question_text",
+   "expected_answer",
+   "accepted_answer_aliases",
+   "fun_fact_line",
+   "language"
+  ],
+  "derived": {
+   "keyterms": "expected_answer + accepted_answer_aliases, deduped, capped at 8 tokens"
+  }
+ },
+ "questions": [
+  {
+   "id": "cricket-01",
+   "category": "Cricket",
+   "difficulty": 2,
+   "question_text": "2011 के Cricket World Cup final में India की captain कौन थी?",
+   "expected_answer": "MS Dhoni",
+   "accepted_answer_aliases": [
+    "Dhoni",
+    "MS Dhoni",
+    "महेंद्र सिंह धोनी",
+    "धोनी",
+    "Mahendra Singh Dhoni",
+    "Mahi",
+    "Captain Cool",
+    "माही"
+   ],
+   "fun_fact_line": "Dhoni ने वो final खुद खत्म किया था — last over में six मारकर! आज भी हर cricket fan वो shot याद रखता है।",
+   "language": "hi-IN",
+   "keyterms": [
+    "MS Dhoni",
+    "Dhoni",
+    "महेंद्र सिंह धोनी",
+    "धोनी",
+    "Mahendra Singh Dhoni",
+    "Mahi",
+    "Captain Cool",
+    "माही"
+   ]
+  },
+  {
+   "id": "cricket-02",
+   "category": "Cricket",
+   "difficulty": 1,
+   "question_text": "Cricket में 'Master Blaster' किस player को कहा जाता है?",
+   "expected_answer": "Sachin Tendulkar",
+   "accepted_answer_aliases": [
+    "Sachin",
+    "Sachin Tendulkar",
+    "Tendulkar",
+    "सचिन",
+    "सचिन तेंदुलकर",
+    "सचिन रमेश तेंदुलकर"
+   ],
+   "fun_fact_line": "Sachin ने international cricket में कुल 100 centuries बनाए — ये record आज भी किसी के पास नहीं है।",
+   "language": "hi-IN",
+   "keyterms": [
+    "Sachin Tendulkar",
+    "Sachin",
+    "Tendulkar",
+    "सचिन",
+    "सचिन तेंदुलकर",
+    "सचिन रमेश तेंदुलकर",
+    "तेंदुलकर",
+    "रमेश"
+   ]
+  },
+  {
+   "id": "cricket-03",
+   "category": "Cricket",
+   "difficulty": 3,
+   "question_text": "In the 2007 T20 World Cup, how many sixes did Yuvraj Singh hit in a single over?",
+   "expected_answer": "6",
+   "accepted_answer_aliases": [
+    "6",
+    "six",
+    "chhe",
+    "chhah",
+    "छह",
+    "छे",
+    "six sixes"
+   ],
+   "fun_fact_line": "Yuvraj ने England के Stuart Broad की over में छहों balls पर six मारा था — Durban में, 2007 में! एक over में 36 runs!",
+   "language": "en-IN",
+   "keyterms": [
+    "6",
+    "six",
+    "chhe",
+    "chhah",
+    "छह",
+    "छे",
+    "six sixes",
+    "sixes"
+   ]
+  },
+  {
+   "id": "cricket-04",
+   "category": "Cricket",
+   "difficulty": 3,
+   "question_text": "Test cricket में एक ही innings में 10 wickets लेने वाले पहले Indian bowler कौन थे?",
+   "expected_answer": "Anil Kumble",
+   "accepted_answer_aliases": [
+    "Anil Kumble",
+    "Kumble",
+    "अनिल कुंबले",
+    "अनिल कुम्बले",
+    "कुंबले",
+    "Jumbo"
+   ],
+   "fun_fact_line": "1999 में Delhi में Pakistan के against Kumble ने पूरी batting lineup अकेले साफ़ कर दी थी — figures थे 10 wickets for 74 runs!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Anil Kumble",
+    "Kumble",
+    "अनिल कुंबले",
+    "अनिल कुम्बले",
+    "कुंबले",
+    "Jumbo",
+    "Anil",
+    "अनिल"
+   ]
+  },
+  {
+   "id": "cricket-05",
+   "category": "Cricket",
+   "difficulty": 2,
+   "question_text": "Which team won the very first IPL in 2008?",
+   "expected_answer": "Rajasthan Royals",
+   "accepted_answer_aliases": [
+    "Rajasthan Royals",
+    "राजस्थान रॉयल्स",
+    "RR",
+    "rajasthan royals"
+   ],
+   "fun_fact_line": "Rajasthan Royals, Shane Warne की captaincy में underdog से champion बने थे — final में Chennai Super Kings को हराया था!",
+   "language": "en-IN",
+   "keyterms": [
+    "Rajasthan Royals",
+    "राजस्थान रॉयल्स",
+    "RR",
+    "Rajasthan",
+    "Royals",
+    "राजस्थान",
+    "रॉयल्स"
+   ]
+  },
+  {
+   "id": "cricket-06",
+   "category": "Cricket",
+   "difficulty": 2,
+   "question_text": "1983 च्या Cricket World Cup मध्ये भारताचा कर्णार (captain) कोण होता?",
+   "expected_answer": "Kapil Dev",
+   "accepted_answer_aliases": [
+    "Kapil Dev",
+    "Kapildev",
+    "Kapil",
+    "कपिल देव",
+    "कपिलदेव",
+    "कपिल"
+   ],
+   "fun_fact_line": "Kapil Dev यांनी final मध्ये बळी West Indies ला हरवून इतिहास रचला — त्या विजयाने संपूर्ण भारताला cricket जिंकणं शक्य आहे हे दाखवून दिलं!",
+   "language": "mr-IN",
+   "keyterms": [
+    "Kapil Dev",
+    "Kapildev",
+    "Kapil",
+    "कपिल देव",
+    "कपिलदेव",
+    "कपिल",
+    "Dev",
+    "देव"
+   ]
+  },
+  {
+   "id": "cricket-07",
+   "category": "Cricket",
+   "difficulty": 2,
+   "question_text": "भारतीय खेळाडू Rohit Sharma यांचे टोपणनाव (nickname) काय आहे?",
+   "expected_answer": "Hitman",
+   "accepted_answer_aliases": [
+    "Hitman",
+    "The Hitman",
+    "हिटमॅन",
+    "हिटमन",
+    "hitman"
+   ],
+   "fun_fact_line": "Rohit यांनी 2014 मध्ये एका ODI मध्ये 264 धावा जोडल्या होत्या — ते तेव्हाचे जागतिक विक्रम होतं. खरंच Hitman!",
+   "language": "mr-IN",
+   "keyterms": [
+    "Hitman",
+    "The Hitman",
+    "हिटमॅन",
+    "हिटमन",
+    "The"
+   ]
+  },
+  {
+   "id": "cricket-08",
+   "category": "Cricket",
+   "difficulty": 2,
+   "question_text": "Cricket में किसी batsman के 'duck' होने का मतलब क्या होता है?",
+   "expected_answer": "zero",
+   "accepted_answer_aliases": [
+    "zero",
+    "0",
+    "शून्य",
+    "shunya",
+    "nought",
+    "no runs",
+    "zero runs",
+    "सुन्ना",
+    "बिना run"
+   ],
+   "fun_fact_line": "अगर first ball पर ही zero पर out हो जाए, तो उसे 'golden duck' कहते हैं — हर batsman का बुरा सपना!",
+   "language": "hi-IN",
+   "keyterms": [
+    "zero",
+    "0",
+    "शून्य",
+    "shunya",
+    "nought",
+    "no runs",
+    "zero runs",
+    "सुन्ना"
+   ]
+  },
+  {
+   "id": "cricket-09",
+   "category": "Cricket",
+   "difficulty": 3,
+   "question_text": "ODI cricket में first double century किसने बनाया था?",
+   "expected_answer": "Sachin Tendulkar",
+   "accepted_answer_aliases": [
+    "Sachin",
+    "Sachin Tendulkar",
+    "Tendulkar",
+    "सचिन",
+    "सचिन तेंदुलकर"
+   ],
+   "fun_fact_line": "Sachin ने 2010 में South Africa के against 200 not out बनाए थे — Gwalior की भरी crowd के सामने history बन गई!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Sachin Tendulkar",
+    "Sachin",
+    "Tendulkar",
+    "सचिन",
+    "सचिन तेंदुलकर",
+    "तेंदुलकर"
+   ]
+  },
+  {
+   "id": "cricket-10",
+   "category": "Cricket",
+   "difficulty": 4,
+   "question_text": "Test cricket में 400 not out का score किस batsman ने बनाया था?",
+   "expected_answer": "Brian Lara",
+   "accepted_answer_aliases": [
+    "Brian Lara",
+    "Lara",
+    "ब्रायन लारा",
+    "ब्रायन",
+    "Brian Charles Lara"
+   ],
+   "fun_fact_line": "Lara ने 2004 में Antigua में England के against ये score बनाया था — Test history का सबसे famous marathon innings में से एक!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Brian Lara",
+    "Lara",
+    "ब्रायन लारा",
+    "ब्रायन",
+    "Brian Charles Lara",
+    "Brian",
+    "लारा",
+    "Charles"
+   ]
+  },
+  {
+   "id": "cricket-11",
+   "category": "Cricket",
+   "difficulty": 3,
+   "question_text": "In cricket, what does LBW stand for?",
+   "expected_answer": "Leg Before Wicket",
+   "accepted_answer_aliases": [
+    "Leg Before Wicket",
+    "leg before wicket",
+    "leg-before-wicket",
+    "लेग बिफोर विकेट"
+   ],
+   "fun_fact_line": "LBW cricket का सबसे tricky rule माना जाता है — ज़्यादातर DRS reviews इसी फैसले पर होते हैं!",
+   "language": "en-IN",
+   "keyterms": [
+    "Leg Before Wicket",
+    "leg-before-wicket",
+    "लेग बिफोर विकेट",
+    "Leg",
+    "Before",
+    "Wicket",
+    "लेग",
+    "बिफोर"
+   ]
+  },
+  {
+   "id": "cricket-12",
+   "category": "Cricket",
+   "difficulty": 5,
+   "question_text": "1983 World Cup में Kapil Dev का famous 175 not out किस team के against आया था?",
+   "expected_answer": "Zimbabwe",
+   "accepted_answer_aliases": [
+    "Zimbabwe",
+    "ज़िम्बाब्वे",
+    "जिम्बाब्वे",
+    "झिम्बाब्वे",
+    "zimbawe",
+    "zim"
+   ],
+   "fun_fact_line": "मज़ेदार बात — BBC strike की वजह से उस historical innings की कोई video recording आज उपलब्ध नहीं है!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Zimbabwe",
+    "ज़िम्बाब्वे",
+    "जिम्बाब्वे",
+    "झिम्बाब्वे",
+    "zimbawe",
+    "zim"
+   ]
+  },
+  {
+   "id": "gk-01",
+   "category": "GK/Bharat",
+   "difficulty": 1,
+   "question_text": "स्वतंत्र भारताचे पहिले पंतप्रधान कोण होते?",
+   "expected_answer": "Jawaharlal Nehru",
+   "accepted_answer_aliases": [
+    "Nehru",
+    "Jawaharlal Nehru",
+    "जवाहरलाल नेहरू",
+    "नेहरू",
+    "पंडित नेहरू",
+    "Chacha Nehru",
+    "चाचा नेहरू"
+   ],
+   "fun_fact_line": "नेहरू यांचा जन्मदिवस 14 नोव्हेंबर — म्हणून तो दिवस भारतात मुलांचा दिवस म्हणून साजरा होतो!",
+   "language": "mr-IN",
+   "keyterms": [
+    "Jawaharlal Nehru",
+    "Nehru",
+    "जवाहरलाल नेहरू",
+    "नेहरू",
+    "पंडित नेहरू",
+    "Chacha Nehru",
+    "चाचा नेहरू",
+    "Jawaharlal"
+   ]
+  },
+  {
+   "id": "gk-02",
+   "category": "GK/Bharat",
+   "difficulty": 1,
+   "question_text": "Taj Mahal भारत के किस शहर में है?",
+   "expected_answer": "Agra",
+   "accepted_answer_aliases": [
+    "Agra",
+    "आगरा",
+    "agra",
+    "आगरा शहर",
+    "Agra Uttar Pradesh"
+   ],
+   "fun_fact_line": "Shah Jahan ने अपनी बेगम Mumtaz Mahal की याद में इसे बनवाया था — करीब 20,000 कारीगरों ने लगभग 20 साल मेहनत की!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Agra",
+    "आगरा",
+    "आगरा शहर",
+    "Agra Uttar Pradesh",
+    "शहर",
+    "Uttar",
+    "Pradesh"
+   ]
+  },
+  {
+   "id": "gk-03",
+   "category": "GK/Bharat",
+   "difficulty": 1,
+   "question_text": "Who is known as the Father of the Nation in India?",
+   "expected_answer": "Mahatma Gandhi",
+   "accepted_answer_aliases": [
+    "Mahatma Gandhi",
+    "Gandhi",
+    "Mohandas Karamchand Gandhi",
+    "महात्मा गांधी",
+    "गांधी",
+    "Bapu",
+    "बापू",
+    "Gandhi ji",
+    "गांधी जी"
+   ],
+   "fun_fact_line": "Gandhi जी के जन्मदिन 2 October पर पूरी दुनिया International Day of Non-Violence मनाती है!",
+   "language": "en-IN",
+   "keyterms": [
+    "Mahatma Gandhi",
+    "Gandhi",
+    "Mohandas Karamchand Gandhi",
+    "महात्मा गांधी",
+    "गांधी",
+    "Bapu",
+    "बापू",
+    "Gandhi ji"
+   ]
+  },
+  {
+   "id": "gk-04",
+   "category": "GK/Bharat",
+   "difficulty": 2,
+   "question_text": "भारत का national anthem 'Jana Gana Mana' किसने लिखा है?",
+   "expected_answer": "Rabindranath Tagore",
+   "accepted_answer_aliases": [
+    "Rabindranath Tagore",
+    "Tagore",
+    "रवींद्रनाथ टैगोर",
+    "रवींद्रनाथ ठाकुर",
+    "Gurudev",
+    "गुरुदेव"
+   ],
+   "fun_fact_line": "Tagore ने बांग्लादेश का national anthem 'Amar Shonar Bangla' भी लिखा है — एक ही कलाकार, दो देशों के anthem!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Rabindranath Tagore",
+    "Tagore",
+    "रवींद्रनाथ टैगोर",
+    "रवींद्रनाथ ठाकुर",
+    "Gurudev",
+    "गुरुदेव",
+    "Rabindranath",
+    "रवींद्रनाथ"
+   ]
+  },
+  {
+   "id": "gk-05",
+   "category": "GK/Bharat",
+   "difficulty": 2,
+   "question_text": "On which date did the Constitution of India come into force?",
+   "expected_answer": "26 January 1950",
+   "accepted_answer_aliases": [
+    "26 January 1950",
+    "26 January",
+    "26 जनवरी 1950",
+    "26 जनवरी",
+    "26th January 1950",
+    "Republic Day",
+    "republic day",
+    "26/1/1950",
+    "twenty six January nineteen fifty"
+   ],
+   "fun_fact_line": "इसी दिन India एक republic बना — इसलिए हर साल 26 January पर हम Republic Day मनाते हैं!",
+   "language": "en-IN",
+   "keyterms": [
+    "26 January 1950",
+    "26 January",
+    "26 जनवरी 1950",
+    "26 जनवरी",
+    "26th January 1950",
+    "Republic Day",
+    "26/1/1950",
+    "twenty six January nineteen fifty"
+   ]
+  },
+  {
+   "id": "gk-06",
+   "category": "GK/Bharat",
+   "difficulty": 2,
+   "question_text": "Space में जाने वाले पहले Indian कौन थे?",
+   "expected_answer": "Rakesh Sharma",
+   "accepted_answer_aliases": [
+    "Rakesh Sharma",
+    "राकेश शर्मा",
+    "राकेश",
+    "Rakesh Sarma",
+    "Squadron Leader Rakesh Sharma"
+   ],
+   "fun_fact_line": "1984 में Soviet spacecraft से गए थे। जब उनसे पूछा गया India ऊपर से कैसा दिखता है, तो जवाब आया — 'Saare Jahan Se Achha!'",
+   "language": "hi-IN",
+   "keyterms": [
+    "Rakesh Sharma",
+    "राकेश शर्मा",
+    "राकेश",
+    "Rakesh Sarma",
+    "Squadron Leader Rakesh Sharma",
+    "Rakesh",
+    "Sharma",
+    "शर्मा"
+   ]
+  },
+  {
+   "id": "gk-07",
+   "category": "GK/Bharat",
+   "difficulty": 2,
+   "question_text": "भारत की पहली महिला प्रधानमंत्री कौन थीं?",
+   "expected_answer": "Indira Gandhi",
+   "accepted_answer_aliases": [
+    "Indira Gandhi",
+    "इंदिरा गांधी",
+    "Indira",
+    "इंदिरा",
+    "इंदिरा प्रियदर्शिनी गांधी",
+    "Mrs Gandhi"
+   ],
+   "fun_fact_line": "1971 की जीत के बाद तो विपक्ष के नेता तक उनकी तारीफ़ में उन्हें 'Durga' कहने लगे थे!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Indira Gandhi",
+    "इंदिरा गांधी",
+    "Indira",
+    "इंदिरा",
+    "इंदिरा प्रियदर्शिनी गांधी",
+    "Mrs Gandhi",
+    "Gandhi",
+    "गांधी"
+   ]
+  },
+  {
+   "id": "gk-08",
+   "category": "GK/Bharat",
+   "difficulty": 2,
+   "question_text": "भारत के पूर्व राष्ट्रपति Dr. APJ Abdul Kalam का famous nickname क्या था?",
+   "expected_answer": "Missile Man of India",
+   "accepted_answer_aliases": [
+    "Missile Man of India",
+    "Missile Man",
+    "missile man",
+    "मिसाइल मैन",
+    "मिसाइल मैन ऑफ इंडिया"
+   ],
+   "fun_fact_line": "Kalam जी newspaper बेचकर पढ़ाई करने वाले थे — और बाद में 'People's President' कहलाए! Simple living, big thinking.",
+   "language": "hi-IN",
+   "keyterms": [
+    "Missile Man of India",
+    "Missile Man",
+    "मिसाइल मैन",
+    "मिसाइल मैन ऑफ इंडिया",
+    "Missile",
+    "Man",
+    "of",
+    "India"
+   ]
+  },
+  {
+   "id": "gk-09",
+   "category": "GK/Bharat",
+   "difficulty": 4,
+   "question_text": "भारत की सबसे ऊँची peak Kangchenjunga कितने metres ऊँची है?",
+   "expected_answer": "8,586 metres",
+   "accepted_answer_aliases": [
+    "8586",
+    "8,586",
+    "8586 metres",
+    "8586 meters",
+    "8586 m",
+    "आठ हज़ार पाँच सौ छियासी",
+    "eight thousand five hundred eighty six",
+    "28,169 feet",
+    "28169 feet"
+   ],
+   "fun_fact_line": "यह दुनिया की तीसरी सबसे ऊँची peak भी है — Sikkim और Nepal की border पर खड़ी है!",
+   "language": "hi-IN",
+   "keyterms": [
+    "8,586 metres",
+    "8586",
+    "8,586",
+    "8586 metres",
+    "8586 meters",
+    "8586 m",
+    "आठ हज़ार पाँच सौ छियासी",
+    "eight thousand five hundred eighty six"
+   ]
+  },
+  {
+   "id": "gk-10",
+   "category": "GK/Bharat",
+   "difficulty": 3,
+   "question_text": "Gujarat में दुनिया की सबसे ऊँची statue 'Statue of Unity' किस leader की है?",
+   "expected_answer": "Sardar Vallabhbhai Patel",
+   "accepted_answer_aliases": [
+    "Sardar Vallabhbhai Patel",
+    "Sardar Patel",
+    "Vallabhbhai Patel",
+    "सरदार वल्लभभाई पटेल",
+    "सरदार पटेल",
+    "पटेल",
+    "Sardar"
+   ],
+   "fun_fact_line": "Statue 182 metres ऊँची है — Statue of Liberty से भी लगभग दोगुनी! 2018 में unveil हुई थी।",
+   "language": "hi-IN",
+   "keyterms": [
+    "Sardar Vallabhbhai Patel",
+    "Sardar Patel",
+    "Vallabhbhai Patel",
+    "सरदार वल्लभभाई पटेल",
+    "सरदार पटेल",
+    "पटेल",
+    "Sardar",
+    "Vallabhbhai"
+   ]
+  },
+  {
+   "id": "gk-11",
+   "category": "GK/Bharat",
+   "difficulty": 4,
+   "question_text": "Chandrayaan-3 का lander Vikram moon की surface पर किस date पर उतरा था?",
+   "expected_answer": "23 August 2023",
+   "accepted_answer_aliases": [
+    "23 August 2023",
+    "23 August",
+    "23 अगस्त 2023",
+    "23 अगस्त",
+    "August 23 2023",
+    "23rd August 2023",
+    "23/8/2023",
+    "23 Aug 2023"
+   ],
+   "fun_fact_line": "उस दिन India moon के south pole के पास landing करने वाला दुनिया का पहला देश बना — और landing site का नाम 'Shiv Shakti' रखा गया!",
+   "language": "hi-IN",
+   "keyterms": [
+    "23 August 2023",
+    "23 August",
+    "23 अगस्त 2023",
+    "23 अगस्त",
+    "August 23 2023",
+    "23rd August 2023",
+    "23/8/2023",
+    "23 Aug 2023"
+   ]
+  },
+  {
+   "id": "gk-12",
+   "category": "GK/Bharat",
+   "difficulty": 5,
+   "question_text": "Who was the first Governor-General of independent India?",
+   "expected_answer": "Lord Mountbatten",
+   "accepted_answer_aliases": [
+    "Lord Mountbatten",
+    "Mountbatten",
+    "माउंटबेटन",
+    "लॉर्ड माउंटबेटन",
+    "Louis Mountbatten",
+    "Earl Mountbatten of Burma"
+   ],
+   "fun_fact_line": "Mountbatten आख़िरी Viceroy भी थे — और India के पहले और एकमात्र Indian Governor-General बने C. Rajagopalachari!",
+   "language": "en-IN",
+   "keyterms": [
+    "Lord Mountbatten",
+    "Mountbatten",
+    "माउंटबेटन",
+    "लॉर्ड माउंटबेटन",
+    "Louis Mountbatten",
+    "Earl Mountbatten of Burma",
+    "Lord",
+    "लॉर्ड"
+   ]
+  },
+  {
+   "id": "math-01",
+   "category": "Ganit",
+   "difficulty": 1,
+   "question_text": "12 गुना 12 कितने होते हैं?",
+   "expected_answer": "144",
+   "accepted_answer_aliases": [
+    "144",
+    "एक सौ चौवालीस",
+    "one hundred forty four",
+    "one hundred and forty four"
+   ],
+   "fun_fact_line": "Trick सीखो: 12×10 = 120, और 12×2 = 24 — तो 120 और 24 जोड़ो, 144! अब तुम भी mental math champion!",
+   "language": "hi-IN",
+   "keyterms": [
+    "144",
+    "एक सौ चौवालीस",
+    "one hundred forty four",
+    "one hundred and forty four",
+    "एक",
+    "सौ",
+    "चौवालीस",
+    "one"
+   ]
+  },
+  {
+   "id": "math-02",
+   "category": "Ganit",
+   "difficulty": 2,
+   "question_text": "150 का आधा (half) कितना होता है?",
+   "expected_answer": "75",
+   "accepted_answer_aliases": [
+    "75",
+    "seventy five",
+    "पचहत्तर"
+   ],
+   "fun_fact_line": "Working: 100 का आधा 50, 50 का आधा 25 — और 50+25 = 75! Tukka नहीं, calculation!",
+   "language": "hi-IN",
+   "keyterms": [
+    "75",
+    "seventy five",
+    "पचहत्तर",
+    "seventy",
+    "five"
+   ]
+  },
+  {
+   "id": "math-03",
+   "category": "Ganit",
+   "difficulty": 2,
+   "question_text": "What is 15 percent of 200?",
+   "expected_answer": "30",
+   "accepted_answer_aliases": [
+    "30",
+    "thirty",
+    "तीस"
+   ],
+   "fun_fact_line": "Working देखो: 10% of 200 = 20, 5% = 10 — तो 15% यानी 20+10 = 30! Shopping discount के time यही formula लगता है।",
+   "language": "en-IN",
+   "keyterms": [
+    "30",
+    "thirty",
+    "तीस"
+   ]
+  },
+  {
+   "id": "math-04",
+   "category": "Ganit",
+   "difficulty": 1,
+   "question_text": "999 मध्ये 1 जोडल्यास उत्तर काय येते?",
+   "expected_answer": "1,000",
+   "accepted_answer_aliases": [
+    "1000",
+    "1,000",
+    "एक हजार",
+    "एक हज़ार",
+    "one thousand",
+    "ek hazaar",
+    "hazaar"
+   ],
+   "fun_fact_line": "999 + 1 = 1,000 — तीन अंकांची संख्या चार अंकांत बदलली! म्हणूनच 999 ला सर्वात मोठी त्र्यंकी संख्या म्हणतात!",
+   "language": "mr-IN",
+   "keyterms": [
+    "1,000",
+    "1000",
+    "एक हजार",
+    "एक हज़ार",
+    "one thousand",
+    "ek hazaar",
+    "hazaar",
+    "एक"
+   ]
+  },
+  {
+   "id": "math-05",
+   "category": "Ganit",
+   "difficulty": 2,
+   "question_text": "How many minutes are there in 2 hours and 30 minutes?",
+   "expected_answer": "150 minutes",
+   "accepted_answer_aliases": [
+    "150",
+    "150 minutes",
+    "150 min",
+    "150 मिनट",
+    "one hundred fifty minutes",
+    "one fifty"
+   ],
+   "fun_fact_line": "Working: 2 घंटे = 120 minutes, आधा घंटा = 30 minutes — तो 120+30 = 150 minutes! Time भी math है!",
+   "language": "en-IN",
+   "keyterms": [
+    "150 minutes",
+    "150",
+    "150 min",
+    "150 मिनट",
+    "one hundred fifty minutes",
+    "one fifty",
+    "minutes",
+    "min"
+   ]
+  },
+  {
+   "id": "math-06",
+   "category": "Ganit",
+   "difficulty": 2,
+   "question_text": "Aap के पास ₹10,000 थे. ₹3,500 का shopping करने के बाद कितने rupees बचे?",
+   "expected_answer": "₹6,500",
+   "accepted_answer_aliases": [
+    "6500",
+    "6,500",
+    "₹6500",
+    "₹6,500",
+    "6500 rupees",
+    "six thousand five hundred",
+    "छह हज़ार पाँच सौ",
+    "छह हजार पांच सौ",
+    "6500 rupaye"
+   ],
+   "fun_fact_line": "Working: 10,000 − 3,000 = 7,000, फिर 7,000 − 500 = 6,500! यानी ₹6,500 बचे — shopping के बाद भी savings!",
+   "language": "hi-IN",
+   "keyterms": [
+    "₹6,500",
+    "6500",
+    "6,500",
+    "₹6500",
+    "6500 rupees",
+    "six thousand five hundred",
+    "छह हज़ार पाँच सौ",
+    "छह हजार पांच सौ"
+   ]
+  },
+  {
+   "id": "math-07",
+   "category": "Ganit",
+   "difficulty": 1,
+   "question_text": "What is 7 multiplied by 8?",
+   "expected_answer": "56",
+   "accepted_answer_aliases": [
+    "56",
+    "fifty six",
+    "छप्पन"
+   ],
+   "fun_fact_line": "Trick: 56 = 7×8 — याद रखो '5678' की pattern: 5, 6, 7, 8 एक ही line में! Tables कभी नहीं भूलोगे।",
+   "language": "en-IN",
+   "keyterms": [
+    "56",
+    "fifty six",
+    "छप्पन",
+    "fifty",
+    "six"
+   ]
+  },
+  {
+   "id": "math-08",
+   "category": "Ganit",
+   "difficulty": 2,
+   "question_text": "Look at this series: 2, 4, 8, 16... which number comes next?",
+   "expected_answer": "32",
+   "accepted_answer_aliases": [
+    "32",
+    "thirty two",
+    "बत्तीस"
+   ],
+   "fun_fact_line": "Working: हर number पिछले का double है — 16×2 = 32! आगे आएगा 64, फिर 128... ये है power of 2 की दुनिया!",
+   "language": "en-IN",
+   "keyterms": [
+    "32",
+    "thirty two",
+    "बत्तीस",
+    "thirty",
+    "two"
+   ]
+  },
+  {
+   "id": "math-09",
+   "category": "Ganit",
+   "difficulty": 2,
+   "question_text": "What do the three angles of any triangle always add up to?",
+   "expected_answer": "180 degrees",
+   "accepted_answer_aliases": [
+    "180",
+    "180 degrees",
+    "180 degree",
+    "180°",
+    "one hundred eighty degrees",
+    "एक सौ अस्सी डिग्री",
+    "180 deg"
+   ],
+   "fun_fact_line": "Working: square में एक diagonal खींचो — दो triangles बनें, और 180+180 = 360°, बराबर square के चारों angles के बराबर! Geometry magic!",
+   "language": "en-IN",
+   "keyterms": [
+    "180 degrees",
+    "180",
+    "180 degree",
+    "180°",
+    "one hundred eighty degrees",
+    "एक सौ अस्सी डिग्री",
+    "180 deg",
+    "degrees"
+   ]
+  },
+  {
+   "id": "math-10",
+   "category": "Ganit",
+   "difficulty": 2,
+   "question_text": "3 dozen केलों में कुल कितने केले होते हैं?",
+   "expected_answer": "36",
+   "accepted_answer_aliases": [
+    "36",
+    "thirty six",
+    "छत्तीस",
+    "chhattis",
+    "36 kele"
+   ],
+   "fun_fact_line": "Working: 1 dozen = 12, तो 3 dozen = 12×3 = 36 केले! Market में eggs भी dozen में ही मिलते हैं!",
+   "language": "hi-IN",
+   "keyterms": [
+    "36",
+    "thirty six",
+    "छत्तीस",
+    "chhattis",
+    "36 kele",
+    "thirty",
+    "six",
+    "kele"
+   ]
+  },
+  {
+   "id": "math-11",
+   "category": "Ganit",
+   "difficulty": 4,
+   "question_text": "इनमें से कौन सा prime number है: 51, 57, या 61?",
+   "expected_answer": "61",
+   "accepted_answer_aliases": [
+    "61",
+    "sixty one",
+    "इकसठ"
+   ],
+   "fun_fact_line": "Working: 51 = 3×17 और 57 = 3×19 — दोनों 3 से divide होते हैं! लेकिन 61 को सिर्फ़ 1 और 61 ही divide करते हैं। Prime confirmed!",
+   "language": "hi-IN",
+   "keyterms": [
+    "61",
+    "sixty one",
+    "इकसठ",
+    "sixty",
+    "one"
+   ]
+  },
+  {
+   "id": "math-12",
+   "category": "Ganit",
+   "difficulty": 3,
+   "question_text": "Cricket match में team को 12 balls में 24 runs चाहिए. हर ball पर average कितने runs चाहिए?",
+   "expected_answer": "2",
+   "accepted_answer_aliases": [
+    "2",
+    "do",
+    "दो",
+    "two",
+    "two runs",
+    "2 runs",
+    "do runs"
+   ],
+   "fun_fact_line": "Working: 24 ÷ 12 = 2 runs हर ball पर — यानी 12 per over! बस चौका-छक्का का combo बनाओ और match जीतो!",
+   "language": "hi-IN",
+   "keyterms": [
+    "2",
+    "do",
+    "दो",
+    "two",
+    "two runs",
+    "2 runs",
+    "do runs",
+    "runs"
+   ]
+  },
+  {
+   "id": "bolly-01",
+   "category": "Bollywood",
+   "difficulty": 1,
+   "question_text": "बॉलीवुड के 'King Khan' कौन हैं?",
+   "expected_answer": "Shah Rukh Khan",
+   "accepted_answer_aliases": [
+    "Shah Rukh Khan",
+    "Shahrukh Khan",
+    "Shahrukh",
+    "SRK",
+    "शाहरुख खान",
+    "शाह रुख खान",
+    "shah rukh khan"
+   ],
+   "fun_fact_line": "SRK की शुरुआत TV serial 'Fauji' से हुई थी — Delhi का लड़का आज दुनिया का King Khan है!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Shah Rukh Khan",
+    "Shahrukh Khan",
+    "Shahrukh",
+    "SRK",
+    "शाहरुख खान",
+    "शाह रुख खान",
+    "Shah",
+    "Rukh"
+   ]
+  },
+  {
+   "id": "bolly-02",
+   "category": "Bollywood",
+   "difficulty": 2,
+   "question_text": "बॉलीवुडचे 'शहेनशाह' म्हणून कोणाला ओळखले जाते?",
+   "expected_answer": "Amitabh Bachchan",
+   "accepted_answer_aliases": [
+    "Amitabh Bachchan",
+    "Amitabh",
+    "अमिताभ बच्चन",
+    "अमिताभ",
+    "Amitabh Bacchan",
+    "Big B",
+    "बिग बी"
+   ],
+   "fun_fact_line": "Amitabh यांनी 'Kaun Banega Crorepati' मुळे लाखो घरांत प्रवेश केला — त्यांचा आवाज स्वतःच एक brand आहे!",
+   "language": "mr-IN",
+   "keyterms": [
+    "Amitabh Bachchan",
+    "Amitabh",
+    "अमिताभ बच्चन",
+    "अमिताभ",
+    "Amitabh Bacchan",
+    "Big B",
+    "बिग बी",
+    "Bachchan"
+   ]
+  },
+  {
+   "id": "bolly-03",
+   "category": "Bollywood",
+   "difficulty": 2,
+   "question_text": "SRK की famous film 'DDLJ' का full form क्या है?",
+   "expected_answer": "Dilwale Dulhania Le Jayenge",
+   "accepted_answer_aliases": [
+    "Dilwale Dulhania Le Jayenge",
+    "dilwale dulhania le jayenge",
+    "दिलवाले दुल्हनिया ले जाएंगे",
+    "दिलवाले दुलहनिया ले जायेंगे"
+   ],
+   "fun_fact_line": "DDLJ Mumbai के Maratha Mandir theatre में 1,000 से ज़्यादा हफ़्तों तक चली — बॉलीवुड की सबसे evergreen love story!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Dilwale Dulhania Le Jayenge",
+    "दिलवाले दुल्हनिया ले जाएंगे",
+    "दिलवाले दुलहनिया ले जायेंगे",
+    "Dilwale",
+    "Dulhania",
+    "Le",
+    "Jayenge",
+    "दिलवाले"
+   ]
+  },
+  {
+   "id": "bolly-04",
+   "category": "Bollywood",
+   "difficulty": 3,
+   "question_text": "भारत की पहली full-length feature film 'Raja Harishchandra' किसने बनाई थी?",
+   "expected_answer": "Dadasaheb Phalke",
+   "accepted_answer_aliases": [
+    "Dadasaheb Phalke",
+    "Dadasaheb Falke",
+    "दादासाहेब फाल्के",
+    "दादासाहेब फालके",
+    "Phalke",
+    "फाल्के",
+    "Dhundiraj Govind Phalke"
+   ],
+   "fun_fact_line": "यह film 1913 में आई थी और बिल्कुल silent थी! Phalke जी को 'Father of Indian Cinema' कहते हैं — India का सबसे बड़ा film award उन्हीं के नाम पर है।",
+   "language": "hi-IN",
+   "keyterms": [
+    "Dadasaheb Phalke",
+    "Dadasaheb Falke",
+    "दादासाहेब फाल्के",
+    "दादासाहेब फालके",
+    "Phalke",
+    "फाल्के",
+    "Dhundiraj Govind Phalke",
+    "Dadasaheb"
+   ]
+  },
+  {
+   "id": "bolly-05",
+   "category": "Bollywood",
+   "difficulty": 2,
+   "question_text": "Iconic villain 'Gabbar Singh' किस film का है?",
+   "expected_answer": "Sholay",
+   "accepted_answer_aliases": [
+    "Sholay",
+    "शोले",
+    "sholay"
+   ],
+   "fun_fact_line": "Amjad Khan का Gabbar आज भी Bollywood का सबसे famous villain माना जाता है — 'Arre o Samba...' कोई नहीं भूला!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Sholay",
+    "शोले"
+   ]
+  },
+  {
+   "id": "bolly-06",
+   "category": "Bollywood",
+   "difficulty": 2,
+   "question_text": "Dialogue सुनो: 'Mogambo khush hua!' — यह किस film का dialogue है?",
+   "expected_answer": "Mr. India",
+   "accepted_answer_aliases": [
+    "Mr India",
+    "Mr. India",
+    "मिस्टर इंडिया",
+    "mister india",
+    "Mr India 1987"
+   ],
+   "fun_fact_line": "Mogambo का role Amrish Puri ने निभाया था, और film में Anil Kapoor और Sridevi थे — 'Hawa Hawai' आज भी सबका favourite!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Mr. India",
+    "Mr India",
+    "मिस्टर इंडिया",
+    "mister india",
+    "Mr India 1987",
+    "Mr.",
+    "India",
+    "Mr"
+   ]
+  },
+  {
+   "id": "bolly-07",
+   "category": "Bollywood",
+   "difficulty": 3,
+   "question_text": "The film 'Lagaan' was nominated for which Oscar category?",
+   "expected_answer": "Best Foreign Language Film",
+   "accepted_answer_aliases": [
+    "Best Foreign Language Film",
+    "Best Foreign Language film",
+    "foreign language film",
+    "Best International Feature",
+    "best foreign film",
+    "foreign film category"
+   ],
+   "fun_fact_line": "Lagaan 2001 की film है — एक cricket match में lagaan की कहानी! Oscar nomination मिला था, और वो खुद बड़ी बात थी।",
+   "language": "en-IN",
+   "keyterms": [
+    "Best Foreign Language Film",
+    "foreign language film",
+    "Best International Feature",
+    "best foreign film",
+    "foreign film category",
+    "Best",
+    "Foreign",
+    "Language"
+   ]
+  },
+  {
+   "id": "bolly-08",
+   "category": "Bollywood",
+   "difficulty": 3,
+   "question_text": "1957 की classic film 'Mother India' में lead role किस actress ने निभाई थी?",
+   "expected_answer": "Nargis",
+   "accepted_answer_aliases": [
+    "Nargis",
+    "नरगिस",
+    "Nargis Dutt"
+   ],
+   "fun_fact_line": "Mother India Indian cinema की पहली film थी जिसे Oscar nomination मिला था — और Nargis का performance आज भी legend है!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Nargis",
+    "नरगिस",
+    "Nargis Dutt",
+    "Dutt"
+   ]
+  },
+  {
+   "id": "bolly-09",
+   "category": "Bollywood",
+   "difficulty": 4,
+   "question_text": "'Mughal-e-Azam' में Anarkali का role किस actress ने निभाया था?",
+   "expected_answer": "Madhubala",
+   "accepted_answer_aliases": [
+    "Madhubala",
+    "मधुबाला",
+    "madhubala"
+   ],
+   "fun_fact_line": "यह film 1960 में आई थी — अपने time की सबसे महंगी Bollywood film! 'Pyar kiya to darna kya' आज भी ज़िंदा है।",
+   "language": "hi-IN",
+   "keyterms": [
+    "Madhubala",
+    "मधुबाला"
+   ]
+  },
+  {
+   "id": "bolly-10",
+   "category": "Bollywood",
+   "difficulty": 2,
+   "question_text": "Tamil cinema के 'Superstar' कौन कहलाते हैं?",
+   "expected_answer": "Rajinikanth",
+   "accepted_answer_aliases": [
+    "Rajinikanth",
+    "Rajnikanth",
+    "रजनीकांत",
+    "Thalaiva",
+    "थलैवा",
+    "Shivaji Rao Gaikwad"
+   ],
+   "fun_fact_line": "Rajinikanth का असली नाम Shivaji Rao Gaikwad है, और वो Bangalore में एक Marathi family में पले-बढ़े — Tamil Nadu से नहीं! MIND IT!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Rajinikanth",
+    "Rajnikanth",
+    "रजनीकांत",
+    "Thalaiva",
+    "थलैवा",
+    "Shivaji Rao Gaikwad",
+    "Shivaji",
+    "Rao"
+   ]
+  },
+  {
+   "id": "bolly-11",
+   "category": "Bollywood",
+   "difficulty": 3,
+   "question_text": "Oscar जीतने वाला गाना 'Jai Ho' किस film का है?",
+   "expected_answer": "Slumdog Millionaire",
+   "accepted_answer_aliases": [
+    "Slumdog Millionaire",
+    "slumdog millionaire",
+    "स्लमडॉग मिलियनेयर",
+    "Slumdog"
+   ],
+   "fun_fact_line": "A. R. Rahman ने इसी film के लिए एक ही ceremony में 2 Oscars जीते — Best Original Score और Best Original Song!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Slumdog Millionaire",
+    "स्लमडॉग मिलियनेयर",
+    "Slumdog",
+    "Millionaire",
+    "स्लमडॉग",
+    "मिलियनेयर"
+   ]
+  },
+  {
+   "id": "bolly-12",
+   "category": "Bollywood",
+   "difficulty": 5,
+   "question_text": "Oscar award जीतने वाले first Indian कौन थे?",
+   "expected_answer": "Bhanu Athaiya",
+   "accepted_answer_aliases": [
+    "Bhanu Athaiya",
+    "भानु अथैया",
+    "भानू अथैया",
+    "Bhanu Athiya",
+    "bhanu athaiya"
+   ],
+   "fun_fact_line": "Bhanu Athaiya costume designer थीं — 1983 में 'Gandhi' film के costumes के लिए Oscar मिला था! उनसे पहले किसी Indian को Oscar नहीं मिला था।",
+   "language": "hi-IN",
+   "keyterms": [
+    "Bhanu Athaiya",
+    "भानु अथैया",
+    "भानू अथैया",
+    "Bhanu Athiya",
+    "Bhanu",
+    "Athaiya",
+    "भानु",
+    "अथैया"
+   ]
+  },
+  {
+   "id": "sci-01",
+   "category": "Vigyan",
+   "difficulty": 1,
+   "question_text": "'लाल ग्रह' (Red Planet) कोणता?",
+   "expected_answer": "Mars",
+   "accepted_answer_aliases": [
+    "Mars",
+    "मंगळ",
+    "मंगल",
+    "mangal",
+    "Mangal",
+    "mangal grah"
+   ],
+   "fun_fact_line": "Mars वर पाणी असल्याच्या खुणा शास्त्रज्ञांना सापडल्या — म्हणूनच तिथे life शोधण्याची मोहीम चालू आहे!",
+   "language": "mr-IN",
+   "keyterms": [
+    "Mars",
+    "मंगळ",
+    "मंगल",
+    "mangal",
+    "mangal grah",
+    "grah"
+   ]
+  },
+  {
+   "id": "sci-02",
+   "category": "Vigyan",
+   "difficulty": 1,
+   "question_text": "What is the chemical formula H2O commonly known as?",
+   "expected_answer": "water",
+   "accepted_answer_aliases": [
+    "water",
+    "पानी",
+    "paani",
+    "pani",
+    "जल"
+   ],
+   "fun_fact_line": "हमारी body भी लगभग 60% पानी है — इसीलिए doctors हमेशा कहते हैं: खूब पानी पियो!",
+   "language": "en-IN",
+   "keyterms": [
+    "water",
+    "पानी",
+    "paani",
+    "pani",
+    "जल"
+   ]
+  },
+  {
+   "id": "sci-03",
+   "category": "Vigyan",
+   "difficulty": 1,
+   "question_text": "Which is the largest planet in our solar system?",
+   "expected_answer": "Jupiter",
+   "accepted_answer_aliases": [
+    "Jupiter",
+    "जुपिटर",
+    "बृहस्पति",
+    "Brihaspati",
+    "गुरु"
+   ],
+   "fun_fact_line": "Jupiter इतना बड़ा है कि उसमें लगभग 1,300 Earths समा सकती हैं! सोचो कितना बड़ा होगा!",
+   "language": "en-IN",
+   "keyterms": [
+    "Jupiter",
+    "जुपिटर",
+    "बृहस्पति",
+    "Brihaspati",
+    "गुरु"
+   ]
+  },
+  {
+   "id": "sci-04",
+   "category": "Vigyan",
+   "difficulty": 3,
+   "question_text": "Cell का 'powerhouse' किसे कहा जाता है?",
+   "expected_answer": "Mitochondria",
+   "accepted_answer_aliases": [
+    "Mitochondria",
+    "mitochondria",
+    "माइटोकॉन्ड्रिया",
+    "माइटोकांड्रिया",
+    "mitochondrion",
+    "mitocondria"
+   ],
+   "fun_fact_line": "Mitochondria की अपनी अलग DNA भी होती है — और वो माँ से आती है! Energy का पूरा बंदोबस्त यहीं होता है।",
+   "language": "hi-IN",
+   "keyterms": [
+    "Mitochondria",
+    "माइटोकॉन्ड्रिया",
+    "माइटोकांड्रिया",
+    "mitochondrion",
+    "mitocondria"
+   ]
+  },
+  {
+   "id": "sci-05",
+   "category": "Vigyan",
+   "difficulty": 2,
+   "question_text": "सूरज की रोशनी से हमारी body में कौन सा vitamin बनता है?",
+   "expected_answer": "Vitamin D",
+   "accepted_answer_aliases": [
+    "Vitamin D",
+    "विटामिन डी",
+    "vitamin D",
+    "vitamin dee",
+    "D vitamin"
+   ],
+   "fun_fact_line": "Vitamin D calcium सोखने में help करता है — इसीलिए रोज़ थोड़ी धूप लो, हड्डियाँ मज़बूत रहेंगी!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Vitamin D",
+    "विटामिन डी",
+    "vitamin dee",
+    "D vitamin",
+    "Vitamin",
+    "विटामिन",
+    "डी",
+    "dee"
+   ]
+  },
+  {
+   "id": "sci-06",
+   "category": "Vigyan",
+   "difficulty": 3,
+   "question_text": "Which gas makes up about 78 percent of Earth's atmosphere?",
+   "expected_answer": "Nitrogen",
+   "accepted_answer_aliases": [
+    "Nitrogen",
+    "nitrogen",
+    "नाइट्रोजन",
+    "नैट्रोजन",
+    "N2"
+   ],
+   "fun_fact_line": "Oxygen सिर्फ़ 21% है! हवा का ज़्यादातर हिस्सा nitrogen ही है — फिर भी साँसों में हमें oxygen ही चाहिए।",
+   "language": "en-IN",
+   "keyterms": [
+    "Nitrogen",
+    "नाइट्रोजन",
+    "नैट्रोजन",
+    "N2"
+   ]
+  },
+  {
+   "id": "sci-07",
+   "category": "Vigyan",
+   "difficulty": 3,
+   "question_text": "Light की speed लगभग कितने kilometres per second है?",
+   "expected_answer": "300,000 km/s",
+   "accepted_answer_aliases": [
+    "300000",
+    "300,000",
+    "3,00,000",
+    "3 lakh",
+    "3 लाख",
+    "three hundred thousand",
+    "3 lakh km",
+    "teen lakh",
+    "299792",
+    "299,792",
+    "3 lakhs"
+   ],
+   "fun_fact_line": "Light एक second में Earth के चक्कर 7 बार लगा सकती है! Sun से Earth तक भी लगभग 8 minutes लगते हैं।",
+   "language": "hi-IN",
+   "keyterms": [
+    "300,000 km/s",
+    "300000",
+    "300,000",
+    "3,00,000",
+    "3 lakh",
+    "3 लाख",
+    "three hundred thousand",
+    "3 lakh km"
+   ]
+  },
+  {
+   "id": "sci-08",
+   "category": "Vigyan",
+   "difficulty": 2,
+   "question_text": "In chemistry, which element has the symbol Au?",
+   "expected_answer": "gold",
+   "accepted_answer_aliases": [
+    "gold",
+    "सोना",
+    "sona",
+    "Gold",
+    "gold element"
+   ],
+   "fun_fact_line": "Au Latin के 'aurum' से आया है — इसीलिए gold का symbol G नहीं बल्कि Au है!",
+   "language": "en-IN",
+   "keyterms": [
+    "gold",
+    "सोना",
+    "sona",
+    "gold element",
+    "element"
+   ]
+  },
+  {
+   "id": "sci-09",
+   "category": "Vigyan",
+   "difficulty": 3,
+   "question_text": "भारत का पहला artificial satellite 'Aryabhata' किस year launch हुआ था?",
+   "expected_answer": "1975",
+   "accepted_answer_aliases": [
+    "1975",
+    "nineteen seventy five",
+    "1975 me",
+    "उन्नीस सौ पचहत्तर"
+   ],
+   "fun_fact_line": "इसका नाम महान mathematician Aryabhata पर रखा गया — 1975 में Soviet rocket से launch हुआ था!",
+   "language": "hi-IN",
+   "keyterms": [
+    "1975",
+    "nineteen seventy five",
+    "1975 me",
+    "उन्नीस सौ पचहत्तर",
+    "nineteen",
+    "seventy",
+    "five",
+    "me"
+   ]
+  },
+  {
+   "id": "sci-10",
+   "category": "Vigyan",
+   "difficulty": 2,
+   "question_text": "Who was the first person to walk on the Moon?",
+   "expected_answer": "Neil Armstrong",
+   "accepted_answer_aliases": [
+    "Neil Armstrong",
+    "neil armstrong",
+    "नील आर्मस्ट्रांग",
+    "Armstrong",
+    "Neil Arm Strong",
+    "neil arm strong"
+   ],
+   "fun_fact_line": "20 July 1969, Apollo 11 — और वो famous words: 'That's one small step for man, one giant leap for mankind!'",
+   "language": "en-IN",
+   "keyterms": [
+    "Neil Armstrong",
+    "नील आर्मस्ट्रांग",
+    "Armstrong",
+    "Neil Arm Strong",
+    "Neil",
+    "नील",
+    "आर्मस्ट्रांग",
+    "Arm"
+   ]
+  },
+  {
+   "id": "sci-11",
+   "category": "Vigyan",
+   "difficulty": 3,
+   "question_text": "How many bones are there in an adult human body?",
+   "expected_answer": "206",
+   "accepted_answer_aliases": [
+    "206",
+    "two hundred six",
+    "दो सौ छह",
+    "206 bones"
+   ],
+   "fun_fact_line": "Babies में bones करीब 300 होती हैं — बड़े होते-होते कई bones जुड़कर 206 रह जाती हैं!",
+   "language": "en-IN",
+   "keyterms": [
+    "206",
+    "two hundred six",
+    "दो सौ छह",
+    "206 bones",
+    "two",
+    "hundred",
+    "six",
+    "दो"
+   ]
+  },
+  {
+   "id": "sci-12",
+   "category": "Vigyan",
+   "difficulty": 4,
+   "question_text": "'भारतीय परमाणु कार्यक्रम के जनक' किसे कहा जाता है?",
+   "expected_answer": "Homi J. Bhabha",
+   "accepted_answer_aliases": [
+    "Homi Bhabha",
+    "Homi J Bhabha",
+    "Homi Jahangir Bhabha",
+    "होमी भाभा",
+    "होमी जहाँगीर भाभा",
+    "Bhabha"
+   ],
+   "fun_fact_line": "Mumbai का atomic research centre आज भी उनके नाम पर है — Bhabha Atomic Research Centre, यानी BARC!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Homi J. Bhabha",
+    "Homi Bhabha",
+    "Homi J Bhabha",
+    "Homi Jahangir Bhabha",
+    "होमी भाभा",
+    "होमी जहाँगीर भाभा",
+    "Bhabha",
+    "Homi"
+   ]
+  },
+  {
+   "id": "pop-01",
+   "category": "Pop-culture/Tech",
+   "difficulty": 1,
+   "question_text": "iPhone किस company का product है?",
+   "expected_answer": "Apple",
+   "accepted_answer_aliases": [
+    "Apple",
+    "apple",
+    "एप्पल",
+    "एपल",
+    "Apple Inc",
+    "apple company"
+   ],
+   "fun_fact_line": "Apple की शुरुआत 1976 में एक garage से हुई थी — Steve Jobs और Steve Wozniak ने पहला computer वहीं बनाया!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Apple",
+    "एप्पल",
+    "एपल",
+    "Apple Inc",
+    "apple company",
+    "Inc",
+    "company"
+   ]
+  },
+  {
+   "id": "pop-02",
+   "category": "Pop-culture/Tech",
+   "difficulty": 2,
+   "question_text": "Bill Gates is the co-founder of which company?",
+   "expected_answer": "Microsoft",
+   "accepted_answer_aliases": [
+    "Microsoft",
+    "माइक्रोसॉफ्ट",
+    "Microsoft Corporation",
+    "microsoft"
+   ],
+   "fun_fact_line": "Gates ने 1975 में Paul Allen के साथ Microsoft शुरू की थी — और आज वो दुनिया के सबसे बड़े philanthropists में हैं!",
+   "language": "en-IN",
+   "keyterms": [
+    "Microsoft",
+    "माइक्रोसॉफ्ट",
+    "Microsoft Corporation",
+    "Corporation"
+   ]
+  },
+  {
+   "id": "pop-03",
+   "category": "Pop-culture/Tech",
+   "difficulty": 2,
+   "question_text": "WWW का full form क्या है?",
+   "expected_answer": "World Wide Web",
+   "accepted_answer_aliases": [
+    "World Wide Web",
+    "world wide web",
+    "वर्ल्ड वाइड वेब"
+   ],
+   "fun_fact_line": "WWW और Internet अलग-अलग चीज़ें हैं! Web सिर्फ़ Internet पर चलने वाली एक service है — confuse मत होना!",
+   "language": "hi-IN",
+   "keyterms": [
+    "World Wide Web",
+    "वर्ल्ड वाइड वेब",
+    "World",
+    "Wide",
+    "Web",
+    "वर्ल्ड",
+    "वाइड",
+    "वेब"
+   ]
+  },
+  {
+   "id": "pop-04",
+   "category": "Pop-culture/Tech",
+   "difficulty": 3,
+   "question_text": "Who invented the World Wide Web?",
+   "expected_answer": "Tim Berners-Lee",
+   "accepted_answer_aliases": [
+    "Tim Berners-Lee",
+    "Tim Berners Lee",
+    "tim berners lee",
+    "टिम बर्नर्स ली",
+    "Berners-Lee"
+   ],
+   "fun_fact_line": "Berners-Lee ने WWW को free रखा — कोई patent नहीं लिया! इसीलिए आज दुनिया free में web use कर पाती है।",
+   "language": "en-IN",
+   "keyterms": [
+    "Tim Berners-Lee",
+    "Tim Berners Lee",
+    "टिम बर्नर्स ली",
+    "Berners-Lee",
+    "Tim",
+    "Berners",
+    "Lee",
+    "टिम"
+   ]
+  },
+  {
+   "id": "pop-05",
+   "category": "Pop-culture/Tech",
+   "difficulty": 2,
+   "question_text": "Which streaming platform is the show 'Stranger Things' on?",
+   "expected_answer": "Netflix",
+   "accepted_answer_aliases": [
+    "Netflix",
+    "नेटफ्लिक्स",
+    "netflix",
+    "net flix"
+   ],
+   "fun_fact_line": "Netflix की शुरुआत DVD rental से हुई थी — streaming तो बहुत बाद में शुरू हुई!",
+   "language": "en-IN",
+   "keyterms": [
+    "Netflix",
+    "नेटफ्लिक्स",
+    "net flix",
+    "net",
+    "flix"
+   ]
+  },
+  {
+   "id": "pop-06",
+   "category": "Pop-culture/Tech",
+   "difficulty": 2,
+   "question_text": "Android operating system किस company का है?",
+   "expected_answer": "Google",
+   "accepted_answer_aliases": [
+    "Google",
+    "गूगल",
+    "google",
+    "Alphabet"
+   ],
+   "fun_fact_line": "Google ने 2005 में Android को ख़रीदा था — उस time Android एक छोटी-सी startup थी!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Google",
+    "गूगल",
+    "Alphabet"
+   ]
+  },
+  {
+   "id": "pop-07",
+   "category": "Pop-culture/Tech",
+   "difficulty": 1,
+   "question_text": "समुद्र के अंदर pineapple में रहने वाला famous cartoon character कौन है?",
+   "expected_answer": "SpongeBob SquarePants",
+   "accepted_answer_aliases": [
+    "SpongeBob SquarePants",
+    "SpongeBob",
+    "spongebob",
+    "स्पंजबॉब",
+    "स्पंज बॉब",
+    "Sponge Bob"
+   ],
+   "fun_fact_line": "SpongeBob 1999 से screens पर है — और उसका पड़ोसी Squidward उससे तंग रहता है, बिल्कुल हमारे padosi जैसा!",
+   "language": "hi-IN",
+   "keyterms": [
+    "SpongeBob SquarePants",
+    "SpongeBob",
+    "स्पंजबॉब",
+    "स्पंज बॉब",
+    "Sponge Bob",
+    "SquarePants",
+    "स्पंज",
+    "बॉब"
+   ]
+  },
+  {
+   "id": "pop-08",
+   "category": "Pop-culture/Tech",
+   "difficulty": 1,
+   "question_text": "Which superhero is known as 'The Dark Knight'?",
+   "expected_answer": "Batman",
+   "accepted_answer_aliases": [
+    "Batman",
+    "batman",
+    "बैटमैन",
+    "Bat man",
+    "Bruce Wayne",
+    "ब्रूस वेन"
+   ],
+   "fun_fact_line": "Batman के पास कोई superpower नहीं — सिर्फ़ intelligence, training और ढेर सारा पैसा! Gotham का favourite billionaire।",
+   "language": "en-IN",
+   "keyterms": [
+    "Batman",
+    "बैटमैन",
+    "Bat man",
+    "Bruce Wayne",
+    "ब्रूस वेन",
+    "Bat",
+    "man",
+    "Bruce"
+   ]
+  },
+  {
+   "id": "pop-09",
+   "category": "Pop-culture/Tech",
+   "difficulty": 2,
+   "question_text": "PlayStation gaming console कोणत्या कंपनीचे आहे?",
+   "expected_answer": "Sony",
+   "accepted_answer_aliases": [
+    "Sony",
+    "सोनी",
+    "sony",
+    "Sony Interactive Entertainment"
+   ],
+   "fun_fact_line": "पहिला PlayStation 1994 मध्ये आला — आता PS5 चा काळ! Gaming ची दुनिया पूर्ण बदलून गेली.",
+   "language": "mr-IN",
+   "keyterms": [
+    "Sony",
+    "सोनी",
+    "Sony Interactive Entertainment",
+    "Interactive",
+    "Entertainment"
+   ]
+  },
+  {
+   "id": "pop-10",
+   "category": "Pop-culture/Tech",
+   "difficulty": 2,
+   "question_text": "AI का full form क्या है?",
+   "expected_answer": "Artificial Intelligence",
+   "accepted_answer_aliases": [
+    "Artificial Intelligence",
+    "artificial intelligence",
+    "आर्टिफिशियल इंटेलिजेंस",
+    "आर्टिफ़िशियल इंटेलिजेंस"
+   ],
+   "fun_fact_line": "Fun fact ये है कि ये quiz खुद AI-powered है — मेरी आवाज़ Bulbul AI से बनी है!",
+   "language": "hi-IN",
+   "keyterms": [
+    "Artificial Intelligence",
+    "आर्टिफिशियल इंटेलिजेंस",
+    "आर्टिफ़िशियल इंटेलिजेंस",
+    "Artificial",
+    "Intelligence",
+    "आर्टिफिशियल",
+    "इंटेलिजेंस",
+    "आर्टिफ़िशियल"
+   ]
+  },
+  {
+   "id": "pop-11",
+   "category": "Pop-culture/Tech",
+   "difficulty": 3,
+   "question_text": "Lip-sync app 'Musical.ly' बाद में किस नाम से popular हुई?",
+   "expected_answer": "TikTok",
+   "accepted_answer_aliases": [
+    "TikTok",
+    "tiktok",
+    "टिकटॉक",
+    "टिक टोक",
+    "Tik Tok",
+    "tick tock"
+   ],
+   "fun_fact_line": "2018 में Musical.ly, TikTok में merge हो गई — और दुनिया भर में short video का craze छा गया!",
+   "language": "hi-IN",
+   "keyterms": [
+    "TikTok",
+    "टिकटॉक",
+    "टिक टोक",
+    "Tik Tok",
+    "tick tock",
+    "टिक",
+    "टोक",
+    "Tik"
+   ]
+  },
+  {
+   "id": "pop-12",
+   "category": "Pop-culture/Tech",
+   "difficulty": 3,
+   "question_text": "Oscar जीतने वाला hit song 'Naatu Naatu' किस Indian film का है?",
+   "expected_answer": "RRR",
+   "accepted_answer_aliases": [
+    "RRR",
+    "rrr",
+    "आर आर आर",
+    "R R R"
+   ],
+   "fun_fact_line": "'Naatu Naatu' ने 2023 के Oscars में Best Original Song जीता — किसी Indian film के गाने के लिए ये पहली बार था!",
+   "language": "hi-IN",
+   "keyterms": [
+    "RRR",
+    "आर आर आर",
+    "R R R",
+    "आर"
+   ]
+  }
+ ]
+}
