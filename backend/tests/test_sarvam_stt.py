@@ -308,9 +308,12 @@ class APIKeyResolutionTests(unittest.TestCase):
     """_api_key fallback logic (no network, no .env reads)."""
 
     def test_env_fallback_when_config_not_importable(self) -> None:
-        # Force the backend.config import to fail even at integration time,
-        # then prove the process env var is used.
-        with mock.patch.dict(sys.modules, {"backend.config": None}):
+        # Force the backend.config import to fail even at integration time
+        # (must scrub BOTH sys.modules AND the cached package attribute --
+        # any earlier test importing backend.config sets `backend.config`
+        # as a package attribute, which defeats the sys.modules trick).
+        import backend as _backend_pkg
+        with mock.patch.object(_backend_pkg, "config", None, create=True),              mock.patch.dict(sys.modules, {"backend.config": None}):
             with mock.patch.dict(os.environ, {"SARVAM_API_KEY": "env-key-xyz"}):
                 self.assertEqual(sarvam_stt._api_key(), "env-key-xyz")
 
