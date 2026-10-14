@@ -245,10 +245,12 @@ class ReactionBankTests(unittest.TestCase):
         self.assertEqual(self.bank["hi"], self.bank["enhi"])
 
     def test_pace_hint_examples(self) -> None:
-        self.assertEqual(self.bank["hi"]["correct_fast"][0]["pace_hint"], 1.15)
-        self.assertEqual(self.bank["hi"]["wrong_funny"][0]["pace_hint"], 0.95)
+        # fix-language calm pacing contract: celebrate/hype <= 1.05, tease 1.0,
+        # repeat 0.95 (was 1.15/1.15/0.95 for the first three — hosts too fast)
+        self.assertEqual(self.bank["hi"]["correct_fast"][0]["pace_hint"], 1.05)
+        self.assertEqual(self.bank["hi"]["wrong_funny"][0]["pace_hint"], 1.0)
         self.assertEqual(self.bank["hi"]["repeat_request"][0]["pace_hint"], 0.95)
-        self.assertEqual(self.bank["hi"]["streak_3"][0]["pace_hint"], 1.15)
+        self.assertEqual(self.bank["hi"]["streak_3"][0]["pace_hint"], 1.05)
 
     def test_d5_authoritative_lines_verbatim(self) -> None:
         hi = self.bank["hi"]

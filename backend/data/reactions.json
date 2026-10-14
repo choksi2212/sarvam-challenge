@@ -1,58 +1,58 @@
 {
   "hi": {
     "correct_fast": [
-      {"text": "वाह! बिजली की रफ़्तार! इसे कहते हैं सही जवाब, सही समय!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "सोचने की फुर्सत भी नहीं दी! बज्जर आज गर्म है!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "Fastest voice first! ऐसे ही चलते रहो, मैच तुम्हारा है!", "pace_hint": 1.15, "role": "celebrate"}
+      {"text": "वाह! बिजली की रफ़्तार! इसे कहते हैं सही जवाब, सही समय!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "सोचने की फुर्सत भी नहीं दी! बज्जर आज गर्म है!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "Fastest voice first! ऐसे ही चलते रहो, मैच तुम्हारा है!", "pace_hint": 1.05, "role": "celebrate"}
     ],
     "correct_confident": [
-      {"text": "कितने आराम से, कितने यक़ीन से! यही है champion का अंदाज़!", "pace_hint": 1.05, "role": "celebrate"},
-      {"text": "पूरा यक़ीन, पूरा सही जवाब! ऐसी style है तो streak ज़रूर बनेगा!", "pace_hint": 1.05, "role": "celebrate"}
+      {"text": "कितने आराम से, कितने यक़ीन से! यही है champion का अंदाज़!", "pace_hint": 1.0, "role": "celebrate"},
+      {"text": "पूरा यक़ीन, पूरा सही जवाब! ऐसी style है तो streak ज़रूर बनेगा!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "correct_slow": [
       {"text": "सही जवाब! पर अगली बार बज्जर ज़रा तेज़ दबाओ, ठीक है?", "pace_hint": 1.0, "role": "celebrate"},
       {"text": "आख़िरकार! जवाब सही है, speed पर अभी काम करना है!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "wrong_confident": [
-      {"text": "इतना confidence, और जवाब ग़लत? हाय राम! दिल दुखा दिया!", "pace_hint": 1.05, "role": "tease"},
-      {"text": "पूरा विश्वास था ना? विश्वास अच्छा है, answer नहीं!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "इतना confidence, और जवाब ग़लत? हाय राम! दिल दुखा दिया!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "पूरा विश्वास था ना? विश्वास अच्छा है, answer नहीं!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_funny": [
-      {"text": "यह जवाब सुनकर तो host हँस पड़ा! Comedy के अंक नहीं मिलते, पर मज़ा आया!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "इसे कहते हैं creative जवाब! अगली बार थोड़ा सच बोलो!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "ग़लत — पर इतनी खूबसूरत ग़लती कम देखी है!", "pace_hint": 0.95, "role": "tease"}
+      {"text": "यह जवाब सुनकर तो host हँस पड़ा! Comedy के अंक नहीं मिलते, पर मज़ा आया!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "इसे कहते हैं creative जवाब! अगली बार थोड़ा सच बोलो!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "ग़लत — पर इतनी खूबसूरत ग़लती कम देखी है!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_close": [
       {"text": "बहुत करीब थे! बस एक इंच पीछे रह गए। अगली बार पक्का!", "pace_hint": 1.0, "role": "tease"},
       {"text": "गोली लक्ष्य छू गई, पर लगी नहीं! No worries, अगला सवाल आपका है!", "pace_hint": 1.0, "role": "tease"}
     ],
     "partial": [
-      {"text": "आधा सही! आधी जीत भी जीत होती है। सही जवाब सुन लो...", "pace_hint": 1.0, "role": "explain"},
-      {"text": "करीब-करीब! थोड़ा और जोर लगाते, तो पूरे अंक तुम्हारे थे!", "pace_hint": 1.0, "role": "explain"}
+      {"text": "आधा सही! आधी जीत भी जीत होती है। सही जवाब सुन लो...", "pace_hint": 0.95, "role": "explain"},
+      {"text": "करीब-करीब! थोड़ा और जोर लगाते, तो पूरे अंक तुम्हारे थे!", "pace_hint": 0.95, "role": "explain"}
     ],
     "unclear": [
       {"text": "आवाज़ साफ़ नहीं पहुँची! कोई बात नहीं — एक बार फिर बोलिए, इस बार mic के पास!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "ज़रा शोर हुआ लगता है! दोबारा बोलिए — बस जवाब साफ़-साफ़!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "timeout": [
-      {"text": "समय समाप्त! घड़ी ने आज बज्जर को हरा दिया। सही जवाब था...", "pace_hint": 1.0, "role": "timeout"},
-      {"text": "टाइम ख़त्म! कोई बात नहीं, अगला सवाल और भी दिलचस्प है!", "pace_hint": 1.0, "role": "timeout"}
+      {"text": "समय समाप्त! घड़ी ने आज बज्जर को हरा दिया। सही जवाब था...", "pace_hint": 0.95, "role": "timeout"},
+      {"text": "टाइम ख़त्म! कोई बात नहीं, अगला सवाल और भी दिलचस्प है!", "pace_hint": 0.95, "role": "timeout"}
     ],
     "no_answer": [
       {"text": "जवाब नहीं आया? Mic ठीक है ना? चलो, अगले सवाल में धमाका करो!", "pace_hint": 1.0, "role": "tease"},
-      {"text": "चुपचाप? जवाब शायद सुनने वालों में छुपा है! अगला सवाल!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "चुपचाप? जवाब शायद सुनने वालों में छुपा है! अगला सवाल!", "pace_hint": 1.0, "role": "tease"}
     ],
     "repeat_request": [
       {"text": "ज़रा साफ़-साफ़ बोलिए, एक बार फिर से!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "माफ़ कीजिए, आवाज़ नहीं पहुँची! इस बार mic के पास बोलिए!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "streak_3": [
-      {"text": "तीन लगातार सही! यह अब luck नहीं — दम है!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "Triple strike! स्टेज पर आग लग गई है!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "तीन लगातार सही! यह अब luck नहीं — दम है!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "Triple strike! स्टेज पर आग लग गई है!", "pace_hint": 1.05, "role": "hype"}
     ],
     "streak_5": [
-      {"text": "पाँच का स्ट्रीक! Host को अब डर लगने लगा है!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "पाँच लगातार! रिकॉर्ड तोड़ दो — देखते हैं कौन रोकता है!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "पाँच का स्ट्रीक! Host को अब डर लगने लगा है!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "पाँच लगातार! रिकॉर्ड तोड़ दो — देखते हैं कौन रोकता है!", "pace_hint": 1.05, "role": "hype"}
     ],
     "final_win": [
       {"text": "Sudden death में भी धमाका! आज आप इस मैच के चैंपियन हैं। बधाई हो!", "pace_hint": 1.0, "role": "finale"},
@@ -69,58 +69,58 @@
   },
   "enhi": {
     "correct_fast": [
-      {"text": "वाह! बिजली की रफ़्तार! इसे कहते हैं सही जवाब, सही समय!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "सोचने की फुर्सत भी नहीं दी! बज्जर आज गर्म है!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "Fastest voice first! ऐसे ही चलते रहो, मैच तुम्हारा है!", "pace_hint": 1.15, "role": "celebrate"}
+      {"text": "वाह! बिजली की रफ़्तार! इसे कहते हैं सही जवाब, सही समय!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "सोचने की फुर्सत भी नहीं दी! बज्जर आज गर्म है!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "Fastest voice first! ऐसे ही चलते रहो, मैच तुम्हारा है!", "pace_hint": 1.05, "role": "celebrate"}
     ],
     "correct_confident": [
-      {"text": "कितने आराम से, कितने यक़ीन से! यही है champion का अंदाज़!", "pace_hint": 1.05, "role": "celebrate"},
-      {"text": "पूरा यक़ीन, पूरा सही जवाब! ऐसी style है तो streak ज़रूर बनेगा!", "pace_hint": 1.05, "role": "celebrate"}
+      {"text": "कितने आराम से, कितने यक़ीन से! यही है champion का अंदाज़!", "pace_hint": 1.0, "role": "celebrate"},
+      {"text": "पूरा यक़ीन, पूरा सही जवाब! ऐसी style है तो streak ज़रूर बनेगा!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "correct_slow": [
       {"text": "सही जवाब! पर अगली बार बज्जर ज़रा तेज़ दबाओ, ठीक है?", "pace_hint": 1.0, "role": "celebrate"},
       {"text": "आख़िरकार! जवाब सही है, speed पर अभी काम करना है!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "wrong_confident": [
-      {"text": "इतना confidence, और जवाब ग़लत? हाय राम! दिल दुखा दिया!", "pace_hint": 1.05, "role": "tease"},
-      {"text": "पूरा विश्वास था ना? विश्वास अच्छा है, answer नहीं!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "इतना confidence, और जवाब ग़लत? हाय राम! दिल दुखा दिया!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "पूरा विश्वास था ना? विश्वास अच्छा है, answer नहीं!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_funny": [
-      {"text": "यह जवाब सुनकर तो host हँस पड़ा! Comedy के अंक नहीं मिलते, पर मज़ा आया!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "इसे कहते हैं creative जवाब! अगली बार थोड़ा सच बोलो!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "ग़लत — पर इतनी खूबसूरत ग़लती कम देखी है!", "pace_hint": 0.95, "role": "tease"}
+      {"text": "यह जवाब सुनकर तो host हँस पड़ा! Comedy के अंक नहीं मिलते, पर मज़ा आया!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "इसे कहते हैं creative जवाब! अगली बार थोड़ा सच बोलो!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "ग़लत — पर इतनी खूबसूरत ग़लती कम देखी है!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_close": [
       {"text": "बहुत करीब थे! बस एक इंच पीछे रह गए। अगली बार पक्का!", "pace_hint": 1.0, "role": "tease"},
       {"text": "गोली लक्ष्य छू गई, पर लगी नहीं! No worries, अगला सवाल आपका है!", "pace_hint": 1.0, "role": "tease"}
     ],
     "partial": [
-      {"text": "आधा सही! आधी जीत भी जीत होती है। सही जवाब सुन लो...", "pace_hint": 1.0, "role": "explain"},
-      {"text": "करीब-करीब! थोड़ा और जोर लगाते, तो पूरे अंक तुम्हारे थे!", "pace_hint": 1.0, "role": "explain"}
+      {"text": "आधा सही! आधी जीत भी जीत होती है। सही जवाब सुन लो...", "pace_hint": 0.95, "role": "explain"},
+      {"text": "करीब-करीब! थोड़ा और जोर लगाते, तो पूरे अंक तुम्हारे थे!", "pace_hint": 0.95, "role": "explain"}
     ],
     "unclear": [
       {"text": "आवाज़ साफ़ नहीं पहुँची! कोई बात नहीं — एक बार फिर बोलिए, इस बार mic के पास!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "ज़रा शोर हुआ लगता है! दोबारा बोलिए — बस जवाब साफ़-साफ़!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "timeout": [
-      {"text": "समय समाप्त! घड़ी ने आज बज्जर को हरा दिया। सही जवाब था...", "pace_hint": 1.0, "role": "timeout"},
-      {"text": "टाइम ख़त्म! कोई बात नहीं, अगला सवाल और भी दिलचस्प है!", "pace_hint": 1.0, "role": "timeout"}
+      {"text": "समय समाप्त! घड़ी ने आज बज्जर को हरा दिया। सही जवाब था...", "pace_hint": 0.95, "role": "timeout"},
+      {"text": "टाइम ख़त्म! कोई बात नहीं, अगला सवाल और भी दिलचस्प है!", "pace_hint": 0.95, "role": "timeout"}
     ],
     "no_answer": [
       {"text": "जवाब नहीं आया? Mic ठीक है ना? चलो, अगले सवाल में धमाका करो!", "pace_hint": 1.0, "role": "tease"},
-      {"text": "चुपचाप? जवाब शायद सुनने वालों में छुपा है! अगला सवाल!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "चुपचाप? जवाब शायद सुनने वालों में छुपा है! अगला सवाल!", "pace_hint": 1.0, "role": "tease"}
     ],
     "repeat_request": [
       {"text": "ज़रा साफ़-साफ़ बोलिए, एक बार फिर से!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "माफ़ कीजिए, आवाज़ नहीं पहुँची! इस बार mic के पास बोलिए!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "streak_3": [
-      {"text": "तीन लगातार सही! यह अब luck नहीं — दम है!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "Triple strike! स्टेज पर आग लग गई है!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "तीन लगातार सही! यह अब luck नहीं — दम है!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "Triple strike! स्टेज पर आग लग गई है!", "pace_hint": 1.05, "role": "hype"}
     ],
     "streak_5": [
-      {"text": "पाँच का स्ट्रीक! Host को अब डर लगने लगा है!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "पाँच लगातार! रिकॉर्ड तोड़ दो — देखते हैं कौन रोकता है!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "पाँच का स्ट्रीक! Host को अब डर लगने लगा है!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "पाँच लगातार! रिकॉर्ड तोड़ दो — देखते हैं कौन रोकता है!", "pace_hint": 1.05, "role": "hype"}
     ],
     "final_win": [
       {"text": "Sudden death में भी धमाका! आज आप इस मैच के चैंपियन हैं। बधाई हो!", "pace_hint": 1.0, "role": "finale"},
@@ -137,58 +137,58 @@
   },
   "en": {
     "correct_fast": [
-      {"text": "Wow! Lightning reflexes! That's what I call the right answer at the right time!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "You didn't even give yourself time to think! That buzzer is on fire today!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "Fastest voice first! Keep this up and the match is yours!", "pace_hint": 1.15, "role": "celebrate"}
+      {"text": "Wow! Lightning reflexes! That's what I call the right answer at the right time!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "You didn't even give yourself time to think! That buzzer is on fire today!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "Fastest voice first! Keep this up and the match is yours!", "pace_hint": 1.05, "role": "celebrate"}
     ],
     "correct_confident": [
-      {"text": "So calm, so sure! Now that is champion style!", "pace_hint": 1.05, "role": "celebrate"},
-      {"text": "Full confidence, fully correct! With flair like this, a streak is guaranteed!", "pace_hint": 1.05, "role": "celebrate"}
+      {"text": "So calm, so sure! Now that is champion style!", "pace_hint": 1.0, "role": "celebrate"},
+      {"text": "Full confidence, fully correct! With flair like this, a streak is guaranteed!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "correct_slow": [
       {"text": "Correct answer! But next time, hit that buzzer a little faster, okay?", "pace_hint": 1.0, "role": "celebrate"},
       {"text": "Finally! The answer is right — the speed still needs some work!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "wrong_confident": [
-      {"text": "That much confidence, and the answer is wrong? Oh dear! You broke my heart!", "pace_hint": 1.05, "role": "tease"},
-      {"text": "You were so sure, weren't you? Great confidence — wrong answer!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "That much confidence, and the answer is wrong? Oh dear! You broke my heart!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "You were so sure, weren't you? Great confidence — wrong answer!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_funny": [
-      {"text": "Hearing that answer, the host burst out laughing! No points for comedy, but I loved it!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "Now that's a creative answer! Next time, try a little truth!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "Wrong — but such a beautiful mistake is rare!", "pace_hint": 0.95, "role": "tease"}
+      {"text": "Hearing that answer, the host burst out laughing! No points for comedy, but I loved it!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "Now that's a creative answer! Next time, try a little truth!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "Wrong — but such a beautiful mistake is rare!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_close": [
       {"text": "So close! You missed it by just one inch! Next time, it's yours — promise!", "pace_hint": 1.0, "role": "tease"},
       {"text": "That arrow kissed the target but didn't stick! No worries — the next question is yours!", "pace_hint": 1.0, "role": "tease"}
     ],
     "partial": [
-      {"text": "Half right! Half a win is still a win. Now listen to the full answer...", "pace_hint": 1.0, "role": "explain"},
-      {"text": "Almost there! A little more effort and the full points were yours!", "pace_hint": 1.0, "role": "explain"}
+      {"text": "Half right! Half a win is still a win. Now listen to the full answer...", "pace_hint": 0.95, "role": "explain"},
+      {"text": "Almost there! A little more effort and the full points were yours!", "pace_hint": 0.95, "role": "explain"}
     ],
     "unclear": [
       {"text": "I couldn't hear that clearly! No problem — say it once more, closer to the mic!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "Sounded a bit noisy on the line! Say it again — just the answer, loud and clear!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "timeout": [
-      {"text": "Time's up! Today the clock beat the buzzer. The correct answer was...", "pace_hint": 1.0, "role": "timeout"},
-      {"text": "Time's up! No worries — the next question is even more interesting!", "pace_hint": 1.0, "role": "timeout"}
+      {"text": "Time's up! Today the clock beat the buzzer. The correct answer was...", "pace_hint": 0.95, "role": "timeout"},
+      {"text": "Time's up! No worries — the next question is even more interesting!", "pace_hint": 0.95, "role": "timeout"}
     ],
     "no_answer": [
       {"text": "No answer came in? Is your mic okay? Come on, make the next question count!", "pace_hint": 1.0, "role": "tease"},
-      {"text": "All quiet? The answer is probably hiding somewhere in your head! Next question!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "All quiet? The answer is probably hiding somewhere in your head! Next question!", "pace_hint": 1.0, "role": "tease"}
     ],
     "repeat_request": [
       {"text": "Just speak a little clearly — one more time, please!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "Sorry, your voice didn't reach me! This time, speak close to the mic!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "streak_3": [
-      {"text": "Three in a row! This isn't luck anymore — this is class!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "Triple strike! The stage is on fire!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "Three in a row! This isn't luck anymore — this is class!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "Triple strike! The stage is on fire!", "pace_hint": 1.05, "role": "hype"}
     ],
     "streak_5": [
-      {"text": "A streak of five! The host is starting to get scared now!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "Five in a row! Break the record — let's see who can stop you!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "A streak of five! The host is starting to get scared now!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "Five in a row! Break the record — let's see who can stop you!", "pace_hint": 1.05, "role": "hype"}
     ],
     "final_win": [
       {"text": "A bang even in sudden death! Today you are the champion of this match. Congratulations!", "pace_hint": 1.0, "role": "finale"},
@@ -205,58 +205,58 @@
   },
   "mr": {
     "correct_fast": [
-      {"text": "वाह! वीजेची झटपट! म्हणतात ना — बरोबर उत्तर, बरोबर वेळ!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "विचार करण्याचीही संधी दिली नाहीस! आज buzzer खरोखर तापला आहे!", "pace_hint": 1.15, "role": "celebrate"},
-      {"text": "Fastest voice first! असेच चालू ठेवा, सामना तुमचाच!", "pace_hint": 1.15, "role": "celebrate"}
+      {"text": "वाह! वीजेची झटपट! म्हणतात ना — बरोबर उत्तर, बरोबर वेळ!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "विचार करण्याचीही संधी दिली नाहीस! आज buzzer खरोखर तापला आहे!", "pace_hint": 1.05, "role": "celebrate"},
+      {"text": "Fastest voice first! असेच चालू ठेवा, सामना तुमचाच!", "pace_hint": 1.05, "role": "celebrate"}
     ],
     "correct_confident": [
-      {"text": "किती शांतपणे, किती आत्मविश्वासाने! हीच असते champion ची हालचाल!", "pace_hint": 1.05, "role": "celebrate"},
-      {"text": "पूर्ण आत्मविश्वास, पूर्ण बरोबर उत्तर! अशी style असेल तर streak नक्की जुळेल!", "pace_hint": 1.05, "role": "celebrate"}
+      {"text": "किती शांतपणे, किती आत्मविश्वासाने! हीच असते champion ची हालचाल!", "pace_hint": 1.0, "role": "celebrate"},
+      {"text": "पूर्ण आत्मविश्वास, पूर्ण बरोबर उत्तर! अशी style असेल तर streak नक्की जुळेल!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "correct_slow": [
       {"text": "बरोबर उत्तर! पण पुढच्या वेळी buzzer जरा लवकर दाबा, ठीक आहे का?", "pace_hint": 1.0, "role": "celebrate"},
       {"text": "शेवटीचं! उत्तर बरोबर आहे — आता speed वर थोडी मेहनत बाकी!", "pace_hint": 1.0, "role": "celebrate"}
     ],
     "wrong_confident": [
-      {"text": "एवढा confidence आणि उत्तर चुकीचे? अरे देवा! छातीत धक्का लागला!", "pace_hint": 1.05, "role": "tease"},
-      {"text": "पूर्ण खात्री होती ना? खात्री छान, पण answer नाही!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "एवढा confidence आणि उत्तर चुकीचे? अरे देवा! छातीत धक्का लागला!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "पूर्ण खात्री होती ना? खात्री छान, पण answer नाही!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_funny": [
-      {"text": "हे उत्तर ऐकून तर host हसलाच! Comedy चे गुण नाही मिळत, पण मजा आली!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "याला म्हणतात creative उत्तर! पुढच्या वेळी जरा खरे बोला!", "pace_hint": 0.95, "role": "tease"},
-      {"text": "चुकीचे — पण इतकी सुंदर चूक फार क्वाचित दिसते!", "pace_hint": 0.95, "role": "tease"}
+      {"text": "हे उत्तर ऐकून तर host हसलाच! Comedy चे गुण नाही मिळत, पण मजा आली!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "याला म्हणतात creative उत्तर! पुढच्या वेळी जरा खरे बोला!", "pace_hint": 1.0, "role": "tease"},
+      {"text": "चुकीचे — पण इतकी सुंदर चूक फार क्वाचित दिसते!", "pace_hint": 1.0, "role": "tease"}
     ],
     "wrong_close": [
       {"text": "खूप जवळ पोहोचलात! फक्त एक इंच उणी राहिले। पुढच्या वेळी पक्के!", "pace_hint": 1.0, "role": "tease"},
       {"text": "बाण लक्ष्याला स्पर्श करून गेला, पण टिकला नाही! No worries — पुढचा प्रश्न तुमचाच!", "pace_hint": 1.0, "role": "tease"}
     ],
     "partial": [
-      {"text": "अर्धे बरोबर! अर्धी जिंकणेही जिंकणेच होय। बरोबर उत्तर ऐका...", "pace_hint": 1.0, "role": "explain"},
-      {"text": "जवळपास होतात! थोडा आणखी जोर लावला असता, तर पूर्ण गुण तुमचे होते!", "pace_hint": 1.0, "role": "explain"}
+      {"text": "अर्धे बरोबर! अर्धी जिंकणेही जिंकणेच होय। बरोबर उत्तर ऐका...", "pace_hint": 0.95, "role": "explain"},
+      {"text": "जवळपास होतात! थोडा आणखी जोर लावला असता, तर पूर्ण गुण तुमचे होते!", "pace_hint": 0.95, "role": "explain"}
     ],
     "unclear": [
       {"text": "आवाज स्पष्ट पोहोचला नाही! काही हरकत नाही — एकदा पुन्हा सांगा, या वेळी mic च्या जवळ!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "आवाजात थोडी गजावळ होती! पुन्हा सांगा — फक्त उत्तर, स्पष्टपणे!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "timeout": [
-      {"text": "वेळ संपली! आज घड्याळने buzzer ला हरवले। बरोबर उत्तर होते ते...", "pace_hint": 1.0, "role": "timeout"},
-      {"text": "Time संपले! काही हरकत नाही, पुढचा प्रश्न आणखी रंजक आहे!", "pace_hint": 1.0, "role": "timeout"}
+      {"text": "वेळ संपली! आज घड्याळने buzzer ला हरवले। बरोबर उत्तर होते ते...", "pace_hint": 0.95, "role": "timeout"},
+      {"text": "Time संपले! काही हरकत नाही, पुढचा प्रश्न आणखी रंजक आहे!", "pace_hint": 0.95, "role": "timeout"}
     ],
     "no_answer": [
       {"text": "उत्तर आले नाही? Mic बरोबर आहे ना? चला, पुढच्या प्रश्नात धमाका करा!", "pace_hint": 1.0, "role": "tease"},
-      {"text": "गप्पच? उत्तर कदाचित तुमच्या डोक्यातच लपले आहे! पुढचा प्रश्न!", "pace_hint": 1.05, "role": "tease"}
+      {"text": "गप्पच? उत्तर कदाचित तुमच्या डोक्यातच लपले आहे! पुढचा प्रश्न!", "pace_hint": 1.0, "role": "tease"}
     ],
     "repeat_request": [
       {"text": "जरा स्पष्टपणे बोला, एकदा पुन्हा!", "pace_hint": 0.95, "role": "repeat"},
       {"text": "माफ करा, आवाज पोहोचला नाही! या वेळी mic च्या जवळ बोला!", "pace_hint": 0.95, "role": "repeat"}
     ],
     "streak_3": [
-      {"text": "सलग तीन बरोबर! ही आता luck नाही — दम आहे!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "Triple strike! स्टेज वर आग पेटली आहे!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "सलग तीन बरोबर! ही आता luck नाही — दम आहे!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "Triple strike! स्टेज वर आग पेटली आहे!", "pace_hint": 1.05, "role": "hype"}
     ],
     "streak_5": [
-      {"text": "पाचची streak! Host ला आता धास्ते वाटायला लागले आहे!", "pace_hint": 1.15, "role": "hype"},
-      {"text": "सलग पाच! रेकॉर्ड मोडा — बघू कोण थांबवते!", "pace_hint": 1.15, "role": "hype"}
+      {"text": "पाचची streak! Host ला आता धास्ते वाटायला लागले आहे!", "pace_hint": 1.05, "role": "hype"},
+      {"text": "सलग पाच! रेकॉर्ड मोडा — बघू कोण थांबवते!", "pace_hint": 1.05, "role": "hype"}
     ],
     "final_win": [
       {"text": "Sudden death मध्येही धमाका! आज तुम्ही या सामन्याचे champion आहात। अभिनंदन!", "pace_hint": 1.0, "role": "finale"},

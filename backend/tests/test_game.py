@@ -921,5 +921,134 @@ class TestErrorPaths(GameTest):
         self.assertEqual(h.last_state()["score"], 0)                 # fresh scoreboard
 
 
+# ------------------------------------------------ fix-language (Agent B)
+
+def _has_devanagari(s: str) -> bool:
+    return any("\u0900" <= ch <= "\u097F" for ch in s)
+
+
+def _has_latin(s: str) -> bool:
+    return any(("a" <= ch <= "z") or ("A" <= ch <= "Z") for ch in s)
+
+
+class PaceVoice(FakeVoice):
+    """FakeVoice + the optional set_pace hook the engine uses for pacing."""
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.pace_calls = []
+
+    def set_pace(self, pace):
+        self.pace_calls.append(float(pace))
+
+
+class TestFixLanguagePacing(GameTest):
+    """Question reads are conversational (1.0); bank hints reach the voice
+    clamped into the calm band [0.85, 1.05]."""
+
+    async def test_pace_clamped_and_question_reads_conversational(self):
+        fast_cast = {n: dict(entry, pace=1.4) for n, entry in TEST_CAST.items()}
+        voice = PaceVoice()
+        h = self.harness(voice=voice, cast=fast_cast)
+        await h.start()
+        await self.wait_question(h, 1)
+        await self.wait_until(lambda: len(voice.pace_calls) >= 4, msg="4 paced utterances")
+        # greeting, rules, round intro at the clamped persona pace; then the
+        # question read is always 1.0 no matter how hot the persona is
+        self.assertEqual(voice.pace_calls, [1.05, 1.05, 1.05, 1.0])
+
+    async def test_reaction_applies_calmed_bank_pace_hint(self):
+        bank = {"correct_fast": [{"text": "वाह! बिजली की रफ़्तार!", "pace_hint": 1.15,
+                                  "role": "celebrate"}]}
+        voice = PaceVoice()
+        h = self.harness(voice=voice, cast=TEST_CAST, bank=bank)
+        await h.start()
+        await self.play_question(h, 1, clock_bump=0.3)      # fast buzz -> correct_fast
+        await self.wait_verdict(h, 1)
+        await self.wait_until(lambda: h.sess._last_reaction_pace == 1.15,
+                              msg="bank hint stashed")
+        self.assertEqual(h.sess.reaction_pace(), 1.05)       # clamped for synthesis
+        await self.wait_until(lambda: 1.05 in voice.pace_calls, msg="reaction paced")
+        self.assertTrue(all(p <= 1.05 for p in voice.pace_calls))
+
+    async def test_repeat_question_stays_conversational(self):
+        voice = PaceVoice()
+        h = self.harness(voice=voice, cast=TEST_CAST)
+        await h.start()
+        q1 = await self.wait_question(h, 1)
+        await self.wait_until(lambda: any(f["caption"] == q1["text"]
+                                          for f in h.of("audio_start")),
+                              msg="question speech")
+        await h.sess.handle({"type": "repeat_question"})
+        await self.wait_until(lambda: voice.pace_calls.count(1.0) >= 2,
+                              msg="repeat read paced 1.0")
+
+
+class TestFixLanguageBankAndCast(GameTest):
+    """The per-language cast rides inside the bank; bank variants cycle."""
+
+    async def test_cast_rides_inside_bank_and_is_popped(self):
+        cast = {n: dict(entry, speaker=f"spk_{n}") for n, entry in TEST_CAST.items()}
+        bank = {"cast": cast, "greeting": "नमस्ते {name}!"}
+        h = self.harness(bank=bank)
+        await h.start()
+        await self.wait_question(h, 1)
+        self.assertEqual(h.sess.cast[2]["speaker"], "spk_2")
+        self.assertNotIn("cast", h.sess.bank)
+        self.assertEqual(h.voice.set_calls[0][0], "spk_1")
+
+    async def test_reaction_bank_variants_cycle_with_hints(self):
+        bank = {"correct_fast": [{"text": "पहला", "pace_hint": 1.05, "role": "celebrate"},
+                                 {"text": "दूसरा", "pace_hint": 1.0, "role": "celebrate"}]}
+        h = self.harness(cast=TEST_CAST, bank=bank)
+        t1, p1 = h.sess._bank_entry("correct_fast")
+        t2, p2 = h.sess._bank_entry("correct_fast")
+        t3, p3 = h.sess._bank_entry("correct_fast")
+        self.assertEqual((t1, t2, t3), ("पहला", "दूसरा", "पहला"))
+        self.assertEqual((p1, p2, p3), (1.05, 1.0, 1.05))
+
+    async def test_string_list_bank_keeps_first_text_semantics(self):
+        h = self.harness(cast=TEST_CAST, bank={"correct_fast": ["एक", "दो"]})
+        self.assertEqual(h.sess._bank_line("correct_fast"), "एक")
+        self.assertEqual(h.sess._bank_line("correct_fast"), "एक")
+
+    async def test_prefix_fallback_still_matches(self):
+        h = self.harness(cast=TEST_CAST, bank={"correct_fast_2": "दो नंबर"})
+        self.assertEqual(h.sess._bank_line("correct_fast"), "दो नंबर")
+
+
+class TestFixLanguageSessionDefaults(GameTest):
+    """en/mr sessions get their own script-matched host copy; hi unchanged."""
+
+    async def test_en_session_host_copy_is_english(self):
+        h = self.harness(language="en", cast=TEST_CAST)
+        await h.start()
+        await self.wait_question(h, 1)
+        caps = [f["caption"] for f in h.of("audio_start")]
+        self.assertTrue(caps)
+        for cap in caps:                       # no Devanagari reaches en-IN personas
+            self.assertFalse(_has_devanagari(cap), cap)
+        self.assertIn("BhashaBuzzer", caps[0])
+        q1 = h.of("question")[0]["text"]
+        self.assertIn(q1, caps)                # question reads speak the question
+
+    async def test_mr_session_host_copy_is_marathi(self):
+        h = self.harness(language="mr", cast=TEST_CAST)
+        await h.start()
+        await self.wait_question(h, 1)
+        caps = [f["caption"] for f in h.of("audio_start")]
+        self.assertTrue(caps)
+        self.assertTrue(_has_devanagari(caps[0]))
+        self.assertIn("BhashaBuzzer", caps[0])
+
+    async def test_hi_session_host_copy_unchanged(self):
+        h = self.harness(cast=TEST_CAST)
+        await h.start()
+        await self.wait_question(h, 1)
+        caps = [f["caption"] for f in h.of("audio_start")]
+        self.assertEqual(caps[0], game.DEFAULT_LINES["greeting"].replace("{name}", "Ashu"))
+        self.assertTrue(_has_devanagari(caps[1]))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -43,6 +43,13 @@ SAMPLE_RATE = 24000
 CODEC = "wav"
 AUDIO_SOURCE = "ws"          # engine speaks through the injected voice channel
 
+# Pacing (fix-language: live feedback "hosts speak too fast"): question reads
+# are always conversational; bank reaction pace_hints are clamped into the
+# calm band below before they reach the voice channel.
+QUESTION_READ_PACE = 1.0
+PACE_FLOOR = 0.85
+PACE_CEILING = 1.05
+
 # phases (§2 — exact names)
 P_LOBBY = "lobby"
 P_ROUND_INTRO = "round_intro"
@@ -64,11 +71,11 @@ DEFAULT_CAST: dict[int, dict[str, Any]] = {
     1: {"speaker": "ratan_hi_customer_expressive", "label": "Ratan — Quizmaster",
         "language_code": "hi-IN", "pace": 1.0},
     2: {"speaker": "ishita_enhi_customer_expressive", "label": "Ishita — Hinglish Teaser",
-        "language_code": "hi-IN", "pace": 1.05},
+        "language_code": "hi-IN", "pace": 1.0},
     3: {"speaker": "ratan_hi_sports", "label": "Ratan — Stadium Hype",
-        "language_code": "hi-IN", "pace": 1.1},
+        "language_code": "hi-IN", "pace": 1.05},
     4: {"speaker": "mukul_hi_suspense", "label": "Mukul — Suspense Boss",
-        "language_code": "hi-IN", "pace": 0.9},
+        "language_code": "hi-IN", "pace": 0.95},
 }
 
 # demo match arc: 2+2+2+1 questions (task spec / design §1.1)
@@ -263,6 +270,81 @@ DEFAULT_TEMPLATE: dict[str, str] = {
     "no_answer": "no_answer",
 }
 
+# Per-session-language fallback host copy (fix-language). The Hinglish table
+# above stays the default of defaults; English and Marathi sessions now get
+# their own script-matched lines instead of Hindi text on en-IN/mr-IN
+# personas (script-mismatched text risks Sarvam's "allowed languages"
+# rejection and reads in the wrong language for the player).
+DEFAULT_LINES_EN: dict[str, str] = {
+    "greeting": "Namaste {name}! Welcome to BhashaBuzzer — the quiz show you play with nothing but your voice!",
+    "rules": "The rules are simple — hear the question, hit the buzzer, speak your answer. Fast answers earn a bonus, and back-to-back correct answers multiply your score!",
+    "round_intro_1": "Round one — a piping hot start! Easy questions, quick answers.",
+    "round_intro_2": "Round two — from here on, it's full Hinglish energy!",
+    "round_intro_3": "Round three — Stadium mode! Not questions anymore — a showdown.",
+    "round_intro_4": "And now... the final question. Sudden death. Get it right — and the match is yours.",
+    "correct": "Correct answer! Well done!",
+    "wrong": "Wrong answer! No worries — the next one is yours.",
+    "partial": "Half right! Half a win is still a win.",
+    "unclear": "Could you say that once more, clearly please!",
+    "repeat_request": "Sorry, I didn't catch that! This time, speak close to the mic.",
+    "no_answer": "No answer? Come on, let's smash the next question!",
+    "timeout": "Time's up! Today the clock beat the buzzer.",
+    "streak_3": "Three in a row! That's not luck anymore — that's class!",
+    "streak_5": "A streak of five! The host is starting to get scared now!",
+    "final_win": "A bang even in sudden death! You are the champion of this match. Congratulations!",
+    "final_lose": "The host pulled ahead on the very last question. When's the rematch?",
+    "game_over": "And that's today's BhashaBuzzer! You scored {score} points — come back tomorrow. Speak and win!",
+    "scoreboard": "Your final score — {score} points!",
+    "reveal": "The correct answer was — {answer}.",
+    "skip": "Alright, let's skip this one!",
+}
+
+DEFAULT_LINES_MR: dict[str, str] = {
+    "greeting": "नमस्कार {name}! स्वागत आहे BhashaBuzzer मध्ये — फक्त तुमच्या आवाजाने खेळायचा quiz show!",
+    "rules": "नियम सोपे आहेत — प्रश्न ऐका, buzzer दाबा, उत्तर बोला. लवकर उत्तराला bonus, आणि लागोपाठ बरोबर उत्तरांना multiplier!",
+    "round_intro_1": "पहिलं राउंड — तापट सुरुवात! प्रश्न सोपे, उत्तरं झटपट!",
+    "round_intro_2": "राउंड दोन — इथून चालेल पूर्ण तेज़ Hinglish!",
+    "round_intro_3": "राउंड तीन — Stadium mode! आत प्रश्न नाही, दंगल होणार!",
+    "round_intro_4": "आणि आता... शेवटचा प्रश्न. Sudden death. बरोबर उत्तर — आणि सामना तुमचा!",
+    "correct": "बरोबर उत्तर! शाब्बास!",
+    "wrong": "चुकीचे उत्तर! काही हरकत नाही — पुढचा प्रश्न तुमचा!",
+    "partial": "अर्धे बरोबर! अर्धी जिंकणेही जिंकणेच होय!",
+    "unclear": "जरा स्पष्टपणे सांगा, एकदा पुन्हा!",
+    "repeat_request": "माफ करा, आवाज पोहोचला नाही! या वेळी mic च्या जवळ बोला!",
+    "no_answer": "उत्तर आले नाही? चला, पुढच्या प्रश्नात धमाका करा!",
+    "timeout": "वेळ संपली! आज घड्याळने buzzer ला हरवले.",
+    "streak_3": "सलग तीन बरोबर! ही आता luck नाही — दम आहे!",
+    "streak_5": "पाचची streak! Host ला आता धास्ते वाटायला लागले आहे!",
+    "final_win": "Sudden death मध्येही धमाका! आज तुम्ही या सामन्याचे champion आहात. अभिनंदन!",
+    "final_lose": "शेवटच्या प्रश्नावर host पुढे निघाला. rematch ची तारीख काय?",
+    "game_over": "आजचा BhashaBuzzer इथे संपला! Score {score} गुण — उद्या पुन्हा या. बोला आणि जिंका!",
+    "scoreboard": "तुमचा final score — {score} गुण!",
+    "reveal": "बरोबर उत्तर होते — {answer}.",
+    "skip": "ठीक आहे, हा प्रश्न सोडून देतो!",
+}
+
+#: session language -> fallback host lines (hi/enhi share the Hinglish table)
+SESSION_DEFAULT_LINES: dict[str, dict[str, str]] = {
+    "hi": DEFAULT_LINES, "enhi": DEFAULT_LINES,
+    "en": DEFAULT_LINES_EN, "mr": DEFAULT_LINES_MR,
+}
+
+
+def default_lines(language: str) -> dict[str, str]:
+    """Fallback host lines for a session language (Hinglish table when unknown)."""
+    return SESSION_DEFAULT_LINES.get(str(language or "").strip().lower(), DEFAULT_LINES)
+
+
+def clamp_pace(pace: Any) -> float:
+    """Clamp a pace into the calm band [PACE_FLOOR, PACE_CEILING] (bad -> 1.0)."""
+    try:
+        value = float(pace)
+    except (TypeError, ValueError):
+        return 1.0
+    if value != value:  # NaN guard
+        return 1.0
+    return max(PACE_FLOOR, min(PACE_CEILING, value))
+
 
 def _bank_text(value: Any, prefix: str) -> Optional[str]:
     """Extract a speakable line from one bank entry (str | {'text'/'line': str} | [str, ...])."""
@@ -279,6 +361,29 @@ def _bank_text(value: Any, prefix: str) -> Optional[str]:
                 return item.strip()
         return None
     return None
+
+
+def _entry_text_and_pace(value: Any, counter: int) -> tuple[Optional[str], Optional[float]]:
+    """(text, pace_hint) from one bank entry; dict-variant lists cycle by ``counter``.
+
+    Shapes: str -> (str, None); ``{"text"/"line": ...}`` -> (text, pace_hint);
+    ``[str, ...]`` -> first string (legacy semantics, unchanged);
+    ``[{"text": ..., "pace_hint": ..., "role": ...}, ...]`` -> the reaction
+    bank shape — ``variants[counter % n]`` so lines rotate deterministically.
+    """
+    if isinstance(value, list):
+        variants = [v for v in value if isinstance(v, dict)]
+        if variants:
+            entry = variants[counter % len(variants)]
+            text = _bank_text(entry, "variant")
+            hint = entry.get("pace_hint")
+            return text, float(hint) if isinstance(hint, (int, float)) else None
+        return _bank_text(value, "list"), None
+    if isinstance(value, dict):
+        text = _bank_text(value, "entry")
+        hint = value.get("pace_hint")
+        return text, float(hint) if isinstance(hint, (int, float)) else None
+    return _bank_text(value, "value"), None
 
 
 # ============================================================== GameSession
@@ -315,6 +420,10 @@ class GameSession:
         self.judge_fn = judge_fn
         self.stt_fn = stt_fn
         self.bank = self._norm_bank(bank)
+        if cast is None:
+            # main.py wires the per-language persona cast through the bank dict
+            # (the relay's GameSession factory seam is 4-arg); pop it out here.
+            cast = self.bank.pop("cast", None)
         self.cast = dict(cast) if cast else {}
         self._timings = {"beat": 1.2, "buzz_window": 10.0, "answer_window": 5.0}
         if timings:
@@ -348,6 +457,8 @@ class GameSession:
         self._last_judge_ms = 0.0
         self._last_verdict = ""
         self._seq = 0
+        self._variant_counters: dict[str, int] = {}
+        self._last_reaction_pace: Optional[float] = None
         self._active: Optional[dict[str, Any]] = None
         self._timer: Optional[asyncio.Task] = None
         self._flow_task: Optional[asyncio.Task] = None
@@ -374,22 +485,44 @@ class GameSession:
             return merged
         return b
 
-    def _bank_line(self, *keys: str) -> str:
-        """Look up a host line: exact keys, then prefix matches, then built-in default."""
+    def _bank_entry(self, *keys: str) -> tuple[str, Optional[float]]:
+        """Look up one bank line as ``(text, pace_hint)``.
+
+        Exact keys first, then prefix matches (correct_fast -> correct_fast_1),
+        then the per-session-language built-in defaults. Reaction-bank values
+        shaped ``[{text, pace_hint, role}, ...]`` cycle deterministically across
+        variants; plain string / string-list values keep their first-text
+        semantics. Counter advances only when a line is actually resolved.
+        """
         for key in keys:
-            text = _bank_text(self.bank.get(key), key)
+            value = self.bank.get(key)
+            if value is None:
+                continue
+            counter = self._variant_counters.get(key, 0)
+            text, hint = _entry_text_and_pace(value, counter)
             if text:
-                return text
+                self._variant_counters[key] = counter + 1
+                return text, hint
         for key in keys:                                    # prefix fallback: correct_fast -> correct_fast_1
             for bank_key in sorted(self.bank):
-                if bank_key.startswith(key):
-                    text = _bank_text(self.bank[bank_key], bank_key)
-                    if text:
-                        return text
+                if not bank_key.startswith(key):
+                    continue
+                value = self.bank.get(bank_key)
+                counter = self._variant_counters.get(bank_key, 0)
+                text, hint = _entry_text_and_pace(value, counter)
+                if text:
+                    self._variant_counters[bank_key] = counter + 1
+                    return text, hint
+        lines = default_lines(self.language)
         for key in keys:
-            if key in DEFAULT_LINES:
-                return DEFAULT_LINES[key]
-        return ""
+            if key in lines:
+                return lines[key], None
+        return "", None
+
+    def _bank_line(self, *keys: str) -> str:
+        """Look up a host line: exact keys, then prefix matches, then built-in default."""
+        text, _ = self._bank_entry(*keys)
+        return text
 
     def _fill(self, line: str, **kw: str) -> str:
         for k, v in kw.items():
@@ -422,11 +555,37 @@ class GameSession:
         if self._active is not None:
             self._active["cancelled"] = True
 
+    async def _set_utterance_pace(self, pace: float) -> None:
+        """Best-effort per-utterance pace via the duck-typed ``set_pace`` hook.
+
+        Voice channels without the hook (or whose reconfig fails) simply keep
+        their current pace — pacing is flavour and must never kill a turn.
+        """
+        try:
+            setter = getattr(self.voice, "set_pace", None)
+            if setter is None:
+                return
+            result = setter(clamp_pace(pace))
+            if inspect.isawaitable(result):
+                await result
+        except Exception:
+            pass
+
+    def reaction_pace(self) -> float:
+        """Pace for the next reaction utterance: the bank line's clamped
+        pace_hint when it carries one, else the persona's base pace."""
+        hint = self._last_reaction_pace
+        return clamp_pace(hint) if hint is not None else self.pace
+
     async def _speak(self, text: str, uid: Optional[str] = None,
-                     stt_ms: float = 0.0, judge_ms: float = 0.0) -> bool:
+                     stt_ms: float = 0.0, judge_ms: float = 0.0,
+                     pace: Optional[float] = None) -> bool:
         """Speak ``text`` through the injected voice, emitting audio_start -> chunks ->
-        audio_end. Returns False when the utterance was barged away."""
+        audio_end. Returns False when the utterance was barged away. ``pace``,
+        when given, is applied first through the optional set_pace hook."""
         uid = uid or self._next_uid()
+        if pace is not None:                                # calm-hosts pacing
+            await self._set_utterance_pace(pace)
         active: dict[str, Any] = {"id": uid, "cancelled": False, "ttfb": None}
         self._active = active
         t0 = time.monotonic()
@@ -545,11 +704,12 @@ class GameSession:
         await self._apply_persona(1)
         self.current_round = 1
         await self._emit_state(P_LOBBY)
-        done = await self._speak(self._fill(self._bank_line("greeting"), name=self.player_name))
+        done = await self._speak(self._fill(self._bank_line("greeting"), name=self.player_name),
+                                pace=self.pace)
         if done:
-            done = await self._speak(self._bank_line("rules"))
+            done = await self._speak(self._bank_line("rules"), pace=self.pace)
         await self._emit_state(P_ROUND_INTRO)
-        await self._speak(self._round_intro_text(1))
+        await self._speak(self._round_intro_text(1), pace=self.pace)
         await self._begin_question()
 
     async def _begin_question(self) -> None:
@@ -567,7 +727,7 @@ class GameSession:
                          "category": q["category"], "difficulty": q["difficulty"],
                          "language": q["language"]})
         self._arm_timer(self._timings["buzz_window"], self._on_buzz_timeout)
-        await self._speak(q["question_text"])
+        await self._speak(q["question_text"], pace=QUESTION_READ_PACE)
         # A buzz/timeout may have barged in mid-speech; nothing more to arm here.
 
     async def _wait_speech_settled(self, max_polls: int = 500) -> None:
@@ -582,7 +742,8 @@ class GameSession:
         await self._wait_speech_settled()
         if react is not None:
             text, uid = react
-            await self._speak(text, uid, stt_ms=self._last_stt_ms, judge_ms=self._last_judge_ms)
+            await self._speak(text, uid, stt_ms=self._last_stt_ms, judge_ms=self._last_judge_ms,
+                              pace=self.reaction_pace())
         await self._emit_state(P_NEXT)
         await asyncio.sleep(self._timings["beat"])
         nxt = self.q_index + 1
@@ -594,7 +755,7 @@ class GameSession:
             await self._emit_state(P_ROUND_SWITCH)
             await self._apply_persona(slot["persona_round"])
             await self._emit_state(P_ROUND_INTRO)
-            await self._speak(self._round_intro_text(slot["persona_round"]))
+            await self._speak(self._round_intro_text(slot["persona_round"]), pace=self.pace)
         self.q_index = nxt - 1
         await self._begin_question()
 
@@ -609,7 +770,7 @@ class GameSession:
                 keys = ("final_lose", "game_over")
         line = self._fill(self._bank_line(*keys), score=self.score)
         scoreboard = self._fill(self._bank_line("scoreboard"), score=self.score)
-        await self._speak((line + " " + scoreboard).strip())
+        await self._speak((line + " " + scoreboard).strip(), pace=self.pace)
 
     # ------------------------------------------------------- event handlers
 
@@ -745,7 +906,7 @@ class GameSession:
         if q is None:
             return
         await self._cancel_active()
-        await self._speak(q["question_text"])               # new utterance_id, same text
+        await self._speak(q["question_text"], pace=QUESTION_READ_PACE)   # new uid, same text
 
     async def _on_skip_question(self) -> None:
         if not self._started:
@@ -772,7 +933,8 @@ class GameSession:
             return
         self._done = True
         await self._cancel_active()
-        await self._speak(self._fill(self._bank_line("game_over"), score=self.score))
+        await self._speak(self._fill(self._bank_line("game_over"), score=self.score),
+                          pace=self.pace)
 
     # ----------------------------------------------------------- timeouts
 
@@ -848,7 +1010,7 @@ class GameSession:
     async def _grace_repeat(self, react: tuple[str, str]) -> None:
         """Host asks the player to repeat; mic re-opens for the 5 s answer window."""
         text, uid = react
-        await self._speak(text, uid)
+        await self._speak(text, uid, pace=self.reaction_pace())
         if self.phase != P_VERDICT:                         # a timeout raced us — move on
             return
         await self._emit_state(P_LISTENING)
@@ -866,9 +1028,10 @@ class GameSession:
         if verdict == "correct":
             tier = ("correct_fast" if speed_bonus(buzz_latency) >= 50
                     else "correct_slow" if speed_bonus(buzz_latency) == 0 else "correct_confident")
-            line = self._bank_line(template, tier, "correct")
+            line, hint = self._bank_entry(template, tier, "correct")
         else:
-            line = self._bank_line(template, verdict)
+            line, hint = self._bank_entry(template, verdict)
+        self._last_reaction_pace = hint if isinstance(hint, (int, float)) else None
         parts.append(line)
         hype = jd.get("hype_line") or ""
         if isinstance(hype, str) and hype.strip():
