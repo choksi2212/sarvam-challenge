@@ -27,7 +27,7 @@
   --accent-hi:     #F2BC59;        /* hover                      */
   --ink:           #0B0A09;        /* text on accent             */
   --accent-dim:    rgba(232, 169, 61, .12);
-  --accent-border: rgba(232, 169, 61, .38);
+  --accent-border: rgba(232, 169, 61, .45);
   --gold:          #E8A93D;        /* alias — #waveform canvas reads this */
 
   /* semantic status (verdicts only) */
@@ -195,7 +195,7 @@ code   { font: inherit; }
 
 /* quiet the telemetry until the socket is live (app.js sets body[data-ws]) */
 body[data-ws="off"] .latency-ticker {
-  opacity: .45;
+  opacity: .35;
   transition: opacity var(--t-med) var(--ease);
 }
 
@@ -303,7 +303,9 @@ body[data-ws="lost"] .phase-badge { color: var(--bad); border-color: var(--bad-b
   overflow: auto;
   overscroll-behavior: contain;
   padding: var(--sp-4);
+  scrollbar-width: none;               /* fitted stage, no chrome */
 }
+[data-screen]::-webkit-scrollbar { display: none; }
 
 [data-screen].is-active  { animation: screen-in 220ms var(--ease) both; }
 [data-screen].is-exiting { animation: screen-out var(--t-med) ease-in both; }
@@ -373,10 +375,11 @@ body[data-ws="lost"] .phase-badge { color: var(--bad); border-color: var(--bad-b
   color: var(--text-2);
   border: 1px solid var(--border-2);
   border-radius: var(--r-md);
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-size: var(--fs-small);
   font-weight: 500;
   letter-spacing: .04em;
+  min-height: 40px;
 }
 .btn-ghost:hover {
   color: var(--text-1);
@@ -643,22 +646,24 @@ body[data-ws="lost"] .phase-badge { color: var(--bad); border-color: var(--bad-b
 
 .rec-timer {
   font-family: var(--font-num);
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: .06em;
   font-variant-numeric: tabular-nums;
-  color: var(--text-2);
-  border: 1px solid var(--border-2);
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
   border-radius: var(--r-full);
   padding: 2px 14px;
-  background: var(--bg-1);
   transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
 }
 
-.buzz-stack:has(.buzzer.listening) .rec-timer {
-  color: var(--accent);
-  border-color: var(--accent-border);
+.buzz-stack:has(.buzzer.idle) .rec-timer,
+.buzz-stack:has(.buzzer.armed) .rec-timer {
+  color: var(--text-2);
+  background: var(--bg-1);
+  border-color: var(--border-2);
 }
 
 .buzz-orb { padding: var(--sp-2); }
@@ -672,8 +677,8 @@ body[data-ws="lost"] .phase-badge { color: var(--bad); border-color: var(--bad-b
   justify-content: center;
   background: var(--bg-2);
   border: 1px solid var(--border-3);
-  /* clean ring shadow: soft lift + 1px top-edge highlight = tactile, no glow */
-  box-shadow: var(--shadow-lift), inset 0 1px 0 rgba(255, 255, 255, .06);
+  /* clean ring shadow: soft lift + top-light/bottom-dark bevel = tactile, no glow */
+  box-shadow: var(--shadow-lift), inset 0 1px 0 rgba(255, 255, 255, .08), inset 0 -2px 4px rgba(0, 0, 0, .3);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
@@ -779,7 +784,18 @@ body[data-ws="lost"] .phase-badge { color: var(--bad); border-color: var(--bad-b
   right: var(--sp-3);
   top: 50%;
   height: 1px;
-  background: var(--border-1);
+  background: var(--border-2);      /* idle baseline */
+}
+
+.wave-box::after {
+  content: "MIC";
+  position: absolute;
+  left: var(--sp-3);
+  top: 5px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  color: var(--text-3);
 }
 
 #waveform {
@@ -829,7 +845,8 @@ body[data-ws="lost"] .phase-badge { color: var(--bad); border-color: var(--bad-b
   line-height: 1;
   letter-spacing: .34em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: currentColor;
+  opacity: .55;
   margin-top: var(--sp-2);
 }
 
@@ -887,18 +904,18 @@ body[data-ws="lost"] .phase-badge { color: var(--bad); border-color: var(--bad-b
 .confetti i:nth-child(even) { background: var(--text-1); }
 .confetti i:nth-child(4n)   { background: var(--ok); }
 
-.confetti i:nth-child(1)  { left: 6%;  --fy: 62vh; --rot: 240deg; height: 14px; }
-.confetti i:nth-child(2)  { left: 13%; --fy: 48vh; --rot: -180deg; }
-.confetti i:nth-child(3)  { left: 23%; --fy: 66vh; --rot: 150deg; height: 10px; }
-.confetti i:nth-child(4)  { left: 31%; --fy: 40vh; --rot: -260deg; }
-.confetti i:nth-child(5)  { left: 38%; --fy: 70vh; --rot: 200deg; height: 15px; }
-.confetti i:nth-child(6)  { left: 47%; --fy: 52vh; --rot: -140deg; }
-.confetti i:nth-child(7)  { left: 55%; --fy: 64vh; --rot: 310deg; height: 10px; }
-.confetti i:nth-child(8)  { left: 63%; --fy: 44vh; --rot: -220deg; }
-.confetti i:nth-child(9)  { left: 71%; --fy: 68vh; --rot: 170deg; height: 14px; }
-.confetti i:nth-child(10) { left: 79%; --fy: 50vh; --rot: -300deg; }
-.confetti i:nth-child(11) { left: 87%; --fy: 60vh; --rot: 260deg; }
-.confetti i:nth-child(12) { left: 94%; --fy: 42vh; --rot: -160deg; height: 10px; }
+.confetti i:nth-child(1)  { left: 6%;  --fy: 62vh; --rot: 240deg; height: 14px; top: -30px; }
+.confetti i:nth-child(2)  { left: 13%; --fy: 48vh; --rot: -180deg; top: -60px; }
+.confetti i:nth-child(3)  { left: 23%; --fy: 66vh; --rot: 150deg; height: 10px; top: -14px; }
+.confetti i:nth-child(4)  { left: 31%; --fy: 40vh; --rot: -260deg; top: -75px; }
+.confetti i:nth-child(5)  { left: 38%; --fy: 70vh; --rot: 200deg; height: 15px; top: -45px; }
+.confetti i:nth-child(6)  { left: 47%; --fy: 52vh; --rot: -140deg; top: -14px; }
+.confetti i:nth-child(7)  { left: 55%; --fy: 64vh; --rot: 310deg; height: 10px; top: -60px; }
+.confetti i:nth-child(8)  { left: 63%; --fy: 44vh; --rot: -220deg; top: -25px; }
+.confetti i:nth-child(9)  { left: 71%; --fy: 68vh; --rot: 170deg; height: 14px; top: -80px; }
+.confetti i:nth-child(10) { left: 79%; --fy: 50vh; --rot: -300deg; top: -14px; }
+.confetti i:nth-child(11) { left: 87%; --fy: 60vh; --rot: 260deg; top: -50px; }
+.confetti i:nth-child(12) { left: 94%; --fy: 42vh; --rot: -160deg; height: 10px; top: -70px; }
 
 body.confetti .confetti i { animation: fall 1.5s ease-in both; }
 
@@ -1065,7 +1082,7 @@ body:has(#type-fallback.show) #persona-lower-third { display: none; }
 #cc-bar {
   position: fixed;
   left: 50%;
-  bottom: var(--sp-3);
+  bottom: calc(var(--sp-3) + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
   z-index: 30;
   max-width: min(680px, calc(100vw - 32px));
@@ -1154,10 +1171,16 @@ body:has(#type-fallback.show) #persona-lower-third { display: none; }
   .brand-name { display: none; }
   .score-chip, .combo-chip { padding: 4px 10px; }
   .q-card { padding: var(--sp-4); }
-  [data-screen] { padding: var(--sp-3); }
-  #persona-lower-third { left: var(--sp-2); bottom: 152px; max-width: calc(100vw - 16px); }
+  [data-screen] { padding: var(--sp-3); padding-bottom: 96px; }
+  #persona-lower-third { left: var(--sp-2); bottom: 96px; max-width: calc(100vw - 16px); }
   .lt-id { display: none; }
   #cc-bar { font-size: 14px; padding: 10px 16px; }
+  /* while recording, yield the corner to the mic UI (persona reappears on return) */
+  #stage:has(#screen-buzz.is-active) #persona-lower-third { display: none; }
+}
+
+@media (max-width: 380px) {
+  .combo-chip { display: none; }   /* keep the topbar on one line on tiny phones */
 }
 
 /* ── 20 · Motion & contrast preferences ────────────────────────────────── */
