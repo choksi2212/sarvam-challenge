@@ -41,6 +41,7 @@ import importlib
 import inspect
 import json
 import logging
+import re
 import time
 import uuid
 from datetime import datetime, timezone
@@ -135,6 +136,55 @@ def get_bank() -> dict:
         return data if isinstance(data, dict) else {}
     except (OSError, ValueError):
         return {}
+
+
+SESSION_LANGUAGES = ("hi", "enhi", "en", "mr")
+
+
+def get_session_flavour(bank: dict, language: str) -> dict:
+    """Per-session bank + cast wiring (fix-language).
+
+    The live bug: ``get_bank()`` handed questions.json to GameSession, so the
+    reaction bank (data/reactions.json) was NEVER used and every session fell
+    back to game.py's Hindi DEFAULT_LINES; the personas.json cast was never
+    injected either, so en/mr sessions ran all-hi-IN hosts. This merges the
+    session-language reaction bank (template_id -> [{text, pace_hint, role},
+    ...]) into ``bank`` and attaches the cast (rounds 1-3 + the sudden-death
+    final host, via personas.persona_for_round) under the reserved ``cast``
+    key, which GameSession pops out. Defensive: flavour must never block a
+    session — any failure leaves the incoming bank untouched.
+    """
+    flavour = dict(bank) if isinstance(bank, dict) else {}
+    lang = str(language or "").strip().lower()
+    if lang not in SESSION_LANGUAGES:
+        lang = "hi"
+    try:
+        path = Path(config.DATA_DIR) / "reactions.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        entries = data.get(lang) or data.get("hi") or {}
+        if isinstance(entries, dict):
+            for template_id, variants in entries.items():
+                if isinstance(variants, list) and variants:
+                    flavour[str(template_id)] = [dict(v) for v in variants
+                                                 if isinstance(v, dict)]
+    except (OSError, ValueError) as exc:
+        log.warning("reaction-bank wiring skipped for %r: %s", lang, exc)
+    try:
+        personas = get_personas_module()
+        cast: dict[int, dict] = {}
+        for num in (1, 2, 3, 4):
+            entry = None
+            try:
+                entry = personas.persona_for_round(num, lang)
+            except Exception:  # noqa: BLE001 — cast holes fall back per-round
+                entry = None
+            if isinstance(entry, dict) and entry.get("speaker"):
+                cast[num] = dict(entry)
+        if cast:
+            flavour["cast"] = cast
+    except Exception as exc:  # noqa: BLE001
+        log.warning("cast wiring skipped for %r: %s", lang, exc)
+    return flavour
 
 
 # --------------------------------------------------------------------------
@@ -242,6 +292,51 @@ def _judge_bucket() -> TokenBucket:
 
 
 # --------------------------------------------------------------------------
+# Script guard (fix-language): Sarvam rejects utterance text that carries no
+# character of the configured language_code's script ("Text must contain at
+# least one character from the allowed languages" — seen live on the WS rung).
+# Belt-and-suspenders: classify every utterance's dominant script and remap
+# language_code BEFORE synthesis so no mismatched line can ever be rejected.
+# Mixed Hinglish code-mix keeps the session's intent (bulbul handles code-mixed
+# text natively; language_code then only steers number/abbrev normalization).
+# --------------------------------------------------------------------------
+_DEVANAGARI_RE = re.compile(r"[\u0900-\u097F]")
+_LATIN_RE = re.compile(r"[A-Za-z]")
+
+
+def detect_script(text: str) -> str:
+    """Classify the script of ``text``: 'devanagari' | 'latin' | 'mixed' | 'none'."""
+    if not isinstance(text, str) or not text.strip():
+        return "none"
+    deva = bool(_DEVANAGARI_RE.search(text))
+    latin = bool(_LATIN_RE.search(text))
+    if deva and latin:
+        return "mixed"
+    if deva:
+        return "devanagari"
+    if latin:
+        return "latin"
+    return "none"
+
+
+def script_safe_language_code(text: str, language_code: str) -> str:
+    """The language_code Sarvam will accept for ``text`` (remaps on script mismatch).
+
+    - Devanagari-only text: hi-IN/mr-IN kept (they share the Devanagari block);
+      anything else (e.g. en-IN) remaps to hi-IN.
+    - Latin-only text: en-IN kept; hi-IN/mr-IN remap to en-IN.
+    - Mixed code-mix or letterless text: keep the configured code.
+    """
+    code = str(language_code or "").strip() or "hi-IN"
+    script = detect_script(text)
+    if script == "devanagari":
+        return code if code in ("hi-IN", "mr-IN") else "hi-IN"
+    if script == "latin":
+        return code if code == "en-IN" else "en-IN"
+    return code
+
+
+# --------------------------------------------------------------------------
 # Transport-ladder voice adapter (the CONTRACT §3 "voice" injected into GameSession)
 # --------------------------------------------------------------------------
 class VoiceUnavailable(Exception):
@@ -283,6 +378,8 @@ class LadderVoice:
         self.pace = float(config.TTS_PACE_DEFAULT)
         self.dict_id: str | None = None
         self.last_metrics: dict[str, Any] = {}
+        self._effective_language_code = ""   # what the channel is actually configured with
+        self._reconfig_pending = False       # lazy reconfig (script guard / pace switch)
 
     # ---------------------------------------------------------------- api
     async def set_speaker(self, speaker: str, language_code: str,
@@ -290,9 +387,48 @@ class LadderVoice:
                           dict_id: str | None = None) -> None:
         self.speaker = str(speaker)
         self.language_code = str(language_code)
+        self._effective_language_code = str(language_code)
         self.pace = float(pace)
         self.dict_id = dict_id
+        self._reconfig_pending = False
         await self._channel.set_speaker(speaker, language_code, pace, dict_id=dict_id)
+
+    def set_pace(self, pace: float) -> None:
+        """Per-utterance pace switch (GameSession duck-type hook, fix-language).
+
+        Marks the channel for ONE lazy reconfig inside the next speak() instead
+        of paying a round-trip per utterance; a no-op when pace is unchanged.
+        """
+        pace = float(pace)
+        if abs(pace - self.pace) < 1e-6:
+            return
+        self.pace = pace
+        self._reconfig_pending = True
+
+    async def _ensure_channel_config(self, text: str) -> None:
+        """Script guard + lazy reconfig before synthesis.
+
+        Remaps the channel's language_code to the utterance's dominant script so
+        Sarvam never rejects the text, then flushes any pending (speaker, pace)
+        reconfig as a single mid-connection config re-send [PROBED works].
+        Best-effort: a failed reconfig never blocks the utterance — the ladder
+        demotes transports and stream/rest still get the safe code.
+        """
+        current = self._effective_language_code or self.language_code
+        target = script_safe_language_code(text, current)
+        if target != self._effective_language_code:
+            log.info("script guard %s: text script remaps language %r -> %r",
+                     self.session_id, current, target)
+            self._effective_language_code = target
+            self._reconfig_pending = True
+        if not self._reconfig_pending:
+            return
+        self._reconfig_pending = False
+        try:
+            await self._channel.set_speaker(self.speaker, self._effective_language_code,
+                                             self.pace, dict_id=self.dict_id)
+        except Exception as exc:  # noqa: BLE001 — never block the utterance
+            log.warning("script-guard reconfig failed for %r: %s", self.session_id, exc)
 
     async def ping(self) -> None:
         await self._channel.ping()
@@ -376,6 +512,9 @@ class LadderVoice:
             raise VoiceUnavailable(
                 f"spend governor={level} — synthesis refused, text only", text=text)
 
+        # ---- script guard (fix-language): never let Sarvam reject the text -
+        await self._ensure_channel_config(text)
+
         # ---- rung 2: Sarvam WS via the session channel ---------------------
         parts: list[bytes] = []
         ws_first_ts: list[float | None] = [None]
@@ -413,7 +552,8 @@ class LadderVoice:
                 continue
             try:
                 blob = await _call_with_backoff(
-                    fn, text, self.speaker, self.language_code,
+                    fn, text, self.speaker,
+                    self._effective_language_code or self.language_code,
                     pace=self.pace, sample_rate=config.TTS_SAMPLE_RATE)
             except Exception as exc:  # noqa: BLE001 — demote one rung further
                 log.warning("TTS %s rung failed for %r: %s", rung_name, utterance_id, exc)
@@ -655,7 +795,13 @@ async def _start_session(conn: dict, send: Callable, msg: dict) -> bool:
         voice = LadderVoice(conn["channel"], conn["session_id"])
         conn["voice"] = voice
         judge_fn = _make_judge_fn(conn)
-        conn["session"] = make_game_session(send, voice, judge_fn, get_bank())
+        bank = get_bank()
+        try:                                    # per-language bank + cast wiring
+            language = str(msg.get("language") or "hi").strip().lower() or "hi"
+            bank = get_session_flavour(bank, language)
+        except Exception as exc:  # noqa: BLE001 — flavour must never block a session
+            log.warning("session flavour wiring failed: %s", exc)
+        conn["session"] = make_game_session(send, voice, judge_fn, bank)
         _STATE.sessions_active += 1
         return True
     except Exception as exc:  # noqa: BLE001 — wiring failure must free the slot

@@ -3,29 +3,29 @@
   "rounds": {
     "hi": {
       "1": {"speaker": "ratan_hi_customer_expressive", "label": "Ratan — the Dramatic Quizmaster", "style_tag": "expressive quizmaster", "language_code": "hi-IN", "pace": 1.0},
-      "2": {"speaker": "ishita_enhi_customer_expressive", "label": "Ishita — the Teasing Hinglish Co-host", "style_tag": "teasing code-mix", "language_code": "hi-IN", "pace": 1.05},
-      "3": {"speaker": "ratan_hi_sports", "label": "Ratan — the Stadium Hype Anchor", "style_tag": "sports commentary", "language_code": "hi-IN", "pace": 1.1}
+      "2": {"speaker": "ishita_enhi_customer_expressive", "label": "Ishita — the Teasing Hinglish Co-host", "style_tag": "teasing code-mix", "language_code": "hi-IN", "pace": 1.0},
+      "3": {"speaker": "ratan_hi_sports", "label": "Ratan — the Stadium Hype Anchor", "style_tag": "sports commentary", "language_code": "hi-IN", "pace": 1.05}
     },
     "enhi": {
       "1": {"speaker": "ratan_hi_customer_expressive", "label": "Ratan — the Dramatic Quizmaster", "style_tag": "expressive quizmaster", "language_code": "hi-IN", "pace": 1.0},
-      "2": {"speaker": "ishita_enhi_customer_expressive", "label": "Ishita — the Teasing Hinglish Co-host", "style_tag": "teasing code-mix", "language_code": "hi-IN", "pace": 1.05},
-      "3": {"speaker": "ratan_hi_sports", "label": "Ratan — the Stadium Hype Anchor", "style_tag": "sports commentary", "language_code": "hi-IN", "pace": 1.1}
+      "2": {"speaker": "ishita_enhi_customer_expressive", "label": "Ishita — the Teasing Hinglish Co-host", "style_tag": "teasing code-mix", "language_code": "hi-IN", "pace": 1.0},
+      "3": {"speaker": "ratan_hi_sports", "label": "Ratan — the Stadium Hype Anchor", "style_tag": "sports commentary", "language_code": "hi-IN", "pace": 1.05}
     },
     "en": {
       "1": {"speaker": "simran_en_customer", "label": "Simran — the Warm-Voiced Quizmaster", "style_tag": "warm quizmaster", "language_code": "en-IN", "pace": 1.0},
-      "2": {"speaker": "ishita_enhi_customer_expressive", "label": "Ishita — the Teasing Hinglish Co-host", "style_tag": "teasing code-mix", "language_code": "en-IN", "pace": 1.05},
-      "3": {"speaker": "ashwin_en_sports_energetic", "label": "Ashwin — the Stadium Fireball", "style_tag": "high-energy sports commentary", "language_code": "en-IN", "pace": 1.1}
+      "2": {"speaker": "ishita_enhi_customer_expressive", "label": "Ishita — the Teasing Hinglish Co-host", "style_tag": "teasing code-mix", "language_code": "en-IN", "pace": 1.0},
+      "3": {"speaker": "ashwin_en_sports_energetic", "label": "Ashwin — the Stadium Fireball", "style_tag": "high-energy sports commentary", "language_code": "en-IN", "pace": 1.05}
     },
     "mr": {
       "1": {"speaker": "soham_mr_narration", "label": "Soham — the Marathi Quizmaster", "style_tag": "narrative quizmaster", "language_code": "mr-IN", "pace": 1.0},
-      "2": {"speaker": "ritu_mr_narration", "label": "Ritu — the Playful Teaser", "style_tag": "playful narration", "language_code": "mr-IN", "pace": 1.05},
-      "3": {"speaker": "mukul_mr_stories", "label": "Mukul — the Stadium Storyteller", "style_tag": "high-energy storytelling", "language_code": "mr-IN", "pace": 1.1}
+      "2": {"speaker": "ritu_mr_narration", "label": "Ritu — the Playful Teaser", "style_tag": "playful narration", "language_code": "mr-IN", "pace": 1.0},
+      "3": {"speaker": "mukul_mr_stories", "label": "Mukul — the Stadium Storyteller", "style_tag": "high-energy storytelling", "language_code": "mr-IN", "pace": 1.05}
     }
   },
   "final": {
-    "hi": {"speaker": "mukul_hi_suspense", "label": "Mukul — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "hi-IN", "pace": 0.9},
-    "enhi": {"speaker": "mukul_hi_suspense", "label": "Mukul — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "hi-IN", "pace": 0.9},
-    "en": {"speaker": "varun_en_suspense", "label": "Varun — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "en-IN", "pace": 0.9},
-    "mr": {"speaker": "mukul_mr_stories", "label": "Mukul — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "mr-IN", "pace": 0.85}
+    "hi": {"speaker": "mukul_hi_suspense", "label": "Mukul — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "hi-IN", "pace": 0.95},
+    "enhi": {"speaker": "mukul_hi_suspense", "label": "Mukul — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "hi-IN", "pace": 0.95},
+    "en": {"speaker": "varun_en_suspense", "label": "Varun — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "en-IN", "pace": 0.95},
+    "mr": {"speaker": "mukul_mr_stories", "label": "Mukul — the Sudden-Death Boss", "style_tag": "suspense", "language_code": "mr-IN", "pace": 0.95}
   }
 }
