@@ -3,57 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0D0806">
+  <meta name="theme-color" content="#0B0A09">
   <meta name="description" content="BhashaBuzzer — बोलो और जीतो · real-time Hinglish voice quiz-show with 224 live host personas.">
   <title>BhashaBuzzer · बोलो और जीतो</title>
 
-  <!-- Typography: Rozha One (display) · Mukta (body) · Teko (numerals) — Devanagari + Latin subsets via unicode-range.
-       Fallback stack (styles.css): Mukta → Noto Sans Devanagari → Noto Sans Tamil → Noto Sans → sans-serif -->
+  <!-- Typography: Rozha One (display · Devanagari serif) · Mukta (UI text) · Teko (numerals)
+       All three carry Devanagari + Latin subsets. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Mukta:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap">
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Game behavior (A10): app.js wires ui/screens.js, ui/*, audio/*, ws — absent in this worktree by design -->
+  <!-- Game behavior: app.js wires ui/screens.js, ui/game.js, audio/*, ws-client -->
   <script type="module" src="app.js"></script>
 </head>
 <body>
 <div id="app">
 
-  <!-- ══ Topbar: brand · latency ticker · phase badge · score · 224-combo counter ══ -->
+  <!-- ══ Topbar: brand · latency ticker · phase · score · combo counter ══ -->
   <header id="topbar" class="topbar">
-    <div class="brand" aria-hidden="true">
-      <span class="brand-mark">ब</span>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">ब</span>
       <span class="brand-name">Bhasha<span class="brand-accent">Buzzer</span></span>
     </div>
 
-    <!-- Latency ticker — honest decomposition: TTS lane &lt;250ms · full loop · server TTFB.
-         A10: set .lat-val text; add .is-fast on #lat-host when &lt;250ms; .is-pulse to flash a chip on update -->
+    <!-- Latency ticker — TTS lane <250ms · full loop · server TTFB.
+         app.js writes plain text ("HOST VOICE 212ms") into each chip and
+         flashes .pulse on update; data-source marks client vs server clock. -->
     <div id="latency-ticker" class="latency-ticker" aria-label="Live latency — host voice, full loop, server TTFB">
-      <span id="lat-host" class="lat-chip lat-hero" title="audio_start → first sample played (TTS lane)">
-        <span class="lat-label">🎙 HOST VOICE</span><span class="lat-val">— ms</span>
-      </span>
-      <span id="lat-loop" class="lat-chip" title="buzz-release → first sample of host reaction (full loop)">
-        <span class="lat-label">YOU → HOST</span><span class="lat-val">— s</span>
-      </span>
-      <span id="lat-server" class="lat-chip" title="server-reported TTS time-to-first-byte">
-        <span class="lat-label">SERVER TTFB</span><span class="lat-val">— ms</span>
-      </span>
+      <span id="lat-host" class="lat-chip lat-hero" title="audio_start → first sample played (TTS lane)">HOST VOICE — ms</span>
+      <span id="lat-loop" class="lat-chip" title="buzz-release → first sample of host reaction (full loop)">YOU → HOST — s</span>
+      <span id="lat-server" class="lat-chip" title="server-reported TTS time-to-first-byte">SERVER TTFB — ms</span>
     </div>
 
-    <!-- Small phase indicator — driven by ui/screens.js setPhaseBadge() -->
+    <!-- Phase indicator — ui/screens.js setPhaseBadge() rewrites text + data-phase -->
     <span id="phase-badge" class="phase-badge" data-phase="boot">BOOT</span>
 
     <div class="topbar-right">
       <span id="score-chip" class="score-chip" title="Score">
-        <span class="score-label">SCORE</span>
-        <span id="score">0</span>
+        <span class="chip-label">SCORE</span>
+        <span id="score" class="chip-num">0</span>
+        <span id="score-delta" class="score-delta" aria-hidden="true"></span>
       </span>
       <span id="combo-chip" class="combo-chip" title="Unique host personas met">
-        <span class="combo-flame" aria-hidden="true">🔥</span>
-        <span class="combo-label">COMBOS</span>
-        <span id="combo-count">0</span><span class="combo-suffix">/224</span>
+        <span class="chip-label">COMBOS</span>
+        <span id="combo-count" class="chip-num">0/224</span>
       </span>
     </div>
   </header>
@@ -64,28 +59,28 @@
     <!-- S1 · Splash — title slam. #btn-enter = the autoplay-unlock gesture -->
     <section id="screen-splash" class="is-active" data-screen="splash" aria-label="BhashaBuzzer — splash">
       <div class="stack splash-stack">
-        <h1 class="title-slam" aria-label="BHASHABUZZER">
+        <span class="shockwave" aria-hidden="true"></span>
+        <h1 class="title-slam" aria-label="BhashaBuzzer">
           <span class="title-line">BHASHA</span>
           <span class="title-line title-accent">BUZZER</span>
         </h1>
-        <span class="shockwave" aria-hidden="true"></span>
         <p class="tagline">बोलो और जीतो</p>
         <p class="tagline-sub">Speak · Buzz · Win</p>
-        <button id="btn-enter" class="btn btn-enter" type="button">TAP TO ENTER THE STAGE</button>
+        <button id="btn-enter" class="btn btn-primary btn-enter" type="button">मंच पर आओ · ENTER</button>
         <p class="splash-hint">एक tap — mic और मंच, दोनों जाग जाएँगे</p>
       </div>
     </section>
 
-    <!-- S2 · Setup — name + host language (hi/enhi/en/mr). Hinglish is the default pick -->
+    <!-- S2 · Setup — name + host language (hi/enhi/en/mr). Hinglish default -->
     <section id="screen-setup" data-screen="setup" hidden aria-label="Setup — नाम और भाषा">
       <div class="stack setup-panel">
         <h2 class="setup-title">आपका नाम?</h2>
         <input id="input-name" class="input-name" type="text" minlength="2" maxlength="20"
                placeholder="यहाँ नाम लिखो" autocomplete="off" autocapitalize="words" enterkeyhint="go"
                aria-label="आपका नाम — 2 से 20 अक्षर">
-        <p class="setup-sub">Host आपको नाम से बुलाएगा — 2 से 20 अक्षर</p>
+        <p class="setup-sub" aria-hidden="true">Host आपको नाम से बुलाएगा — 2 से 20 अक्षर</p>
         <div id="lang-chips" class="lang-chips" role="group" aria-label="Host language चुनो">
-          <span class="lang-legend">भाषा · LANGUAGE</span>
+          <span class="lang-legend" aria-hidden="true">भाषा · LANGUAGE</span>
           <button type="button" class="lang-chip" data-lang="hi" aria-pressed="false">हिंदी</button>
           <button type="button" class="lang-chip" data-lang="enhi" aria-pressed="true">Hinglish</button>
           <button type="button" class="lang-chip" data-lang="en" aria-pressed="false">English</button>
@@ -95,28 +90,27 @@
       </div>
     </section>
 
-    <!-- S3 · Lobby — host wakes + greets by name (rules VO); #lobby-msg mirrors the CC text -->
+    <!-- S3 · Lobby — host wakes + greets by name -->
     <section id="screen-lobby" data-screen="lobby" hidden aria-label="Lobby — host उठ रहा है">
       <div class="stack lobby-stack">
-        <div class="spot-cone" aria-hidden="true"></div>
-        <p id="lobby-msg" class="lobby-msg">मंच तैयार हो रहा है… host उठ रहा है 🎙</p>
+        <span class="lobby-dot" aria-hidden="true"></span>
+        <p id="lobby-msg" class="lobby-msg">मंच तैयार हो रहा है…</p>
       </div>
     </section>
 
-    <!-- S5 · Question card — big native-script-ready text; repeat/skip -->
+    <!-- S5 · Question card — repeat/skip -->
     <section id="screen-question" data-screen="question" hidden aria-label="Question card">
       <div class="stack question-stack">
         <article id="q-card" class="q-card">
           <header class="q-meta">
             <span id="q-category" class="q-category">क्विज़ · GK</span>
-            <span id="q-difficulty" class="q-difficulty" role="img" aria-label="Difficulty pips">
-              <span class="pip is-on"></span><span class="pip is-on"></span><span class="pip"></span>
-            </span>
+            <span class="q-level" aria-hidden="true">LEVEL</span>
+            <span id="q-difficulty" class="q-difficulty" aria-label="Difficulty level">1</span>
           </header>
           <h2 id="q-text" class="q-text" lang="hi">सवाल यहाँ आएगा…</h2>
           <footer class="q-actions">
-            <button id="btn-repeat" class="btn btn-ghost" type="button" title="Host फिर से पढ़ेगा">⟳ फिर से</button>
-            <button id="btn-skip" class="btn btn-ghost" type="button" title="अगला सवाल">⏭ SKIP</button>
+            <button id="btn-repeat" class="btn btn-ghost" type="button" title="Host फिर से पढ़ेगा">फिर से</button>
+            <button id="btn-skip" class="btn btn-ghost" type="button" title="अगला सवाल">SKIP</button>
           </footer>
         </article>
         <p class="q-buzz-hint">जवाब पता चले तो <strong>BUZZER</strong> दबाओ — host की आवाज़ रुकेगी नहीं, तुम बोलो</p>
@@ -124,75 +118,72 @@
     </section>
 
     <!-- S6/S7 · Buzz + record — the hero prop.
-         A10 state machine (class on #buzzer): idle → armed (phase question) → pressed → listening (rec) · locked (judging/verdict)
-         Labels: idle "रुको… WAIT" · armed "बोलो! BUZZ IN" · pressed "…" · listening "सुन रहा हूँ… LISTENING"
-         #waveform + #rec-timer auto-show only while .listening (CSS :has). .rec-arc drains via stroke-dashoffset 0→339.3 -->
+         Buzzer state machine (class on #buzzer): idle → armed (question) → pressed → listening · locked.
+         Labels: idle "रुको… WAIT" · armed "बोलो! BUZZ IN" · pressed "…" · listening "सुन रहा हूँ… LISTENING".
+         #rec-timer receives plain countdown text from app.js; #waveform bars read --gold. -->
     <section id="screen-buzz" data-screen="buzz" hidden aria-label="Buzzer — दबाकर बोलो">
       <div class="stack buzz-stack">
         <div class="buzz-orb">
-          <div id="rec-timer" class="rec-timer" role="timer" aria-label="Recording countdown">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="rec-track" cx="60" cy="60" r="54"></circle>
-              <circle class="rec-arc" cx="60" cy="60" r="54"></circle>
-            </svg>
-            <span class="rec-count">8.0s</span>
-          </div>
           <div id="buzzer" class="buzzer idle" role="button" tabindex="0" aria-pressed="false" aria-label="Buzzer — दबाकर बोलो">
             <span class="buzzer-label">रुको…<br>WAIT</span>
           </div>
         </div>
-        <canvas id="waveform" width="640" height="150" aria-hidden="true"></canvas>
+        <div id="rec-timer" class="rec-timer" role="timer" aria-label="Recording countdown">8s</div>
+        <div class="wave-box" aria-hidden="true">
+          <canvas id="waveform" width="640" height="150"></canvas>
+        </div>
         <p class="buzz-hint">दबाकर पकड़े रखो — hold करके बोलो · <strong>SPACE</strong> भी चलेगा</p>
       </div>
     </section>
 
-    <!-- S9 · Verdict — stamp slam + "YOU SAID" honesty bubble + host line. Confetti bursts on correct.
-         A10: set #verdict-stamp text + variant class (.v-correct सही · .v-wrong गलत · .v-partial ALMOST) -->
+    <!-- S9 · Verdict — stamp slam + "YOU SAID" bubble + host line.
+         app.js sets #verdict-stamp className = "stamp verdict-correct|verdict-wrong|verdict-partial|verdict-unclear"
+         (+ .stamp-pop, data-verdict) and adds body.confetti briefly on correct. -->
     <section id="screen-verdict" data-screen="verdict" hidden aria-label="Verdict">
       <div class="confetti" aria-hidden="true">
-        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i>
       </div>
       <div class="stack verdict-stack">
-        <div id="verdict-stamp" class="stamp v-correct" role="status" aria-live="polite">सही!</div>
+        <div id="verdict-stamp" class="stamp verdict-correct" data-verdict="correct" role="status" aria-live="polite">सही!</div>
         <div class="heard-bubble">
-          <span class="heard-label">आपने कहा · YOU SAID</span>
           <span id="heard-text" class="heard-text">…</span>
         </div>
         <p id="host-line" class="host-line">…</p>
       </div>
     </section>
 
-    <!-- S11 · Final — score slam + play again -->
+    <!-- S11 · Final — score + play again -->
     <section id="screen-final" data-screen="final" hidden aria-label="Final score">
       <div class="stack final-stack">
         <p class="final-kicker">आज का मुक़ाबला · FINAL SCORE</p>
-        <div id="final-score">0</div>
-        <p class="final-note">Daily 5 रोज़ आता है — कल फिर आना 🔥</p>
+        <div id="final-score" class="final-score">0</div>
+        <div id="final-daily5" class="final-daily5" aria-label="Daily 5 marks"></div>
+        <p class="final-note">Daily 5 रोज़ आता है — कल फिर आना</p>
         <button id="btn-again" class="btn btn-primary btn-again" type="button">फिर से खेलो · PLAY AGAIN</button>
       </div>
     </section>
 
     <!-- ══ Global overlays (fixed-position, direct stage children per CONTRACT §6) ══ -->
 
-    <!-- Persona lower-third — broadcast host card. A10: remove [hidden], add .is-in (1.8s wipe); .is-new flashes NEW HOST -->
+    <!-- Persona lower-third — app.js fills name/style/id, removes [hidden], adds .is-in;
+         body.new-host (or .is-new) flashes the NEW HOST badge -->
     <div id="persona-lower-third" hidden aria-live="polite">
-      <div class="lt-rule" aria-hidden="true"></div>
       <div class="lt-card">
-        <div class="lt-disc" aria-hidden="true">R</div>
+        <span class="lt-disc" aria-hidden="true">R</span>
         <div class="lt-text">
-          <span id="persona-name">RATAN</span>
-          <span id="persona-style">EXPRESSIVE QUIZMASTER</span>
-          <code id="persona-id">ratan_hi_customer_expressive</code>
+          <span id="persona-name" class="lt-name">RATAN</span>
+          <span id="persona-style" class="lt-style">EXPRESSIVE QUIZMASTER</span>
         </div>
+        <code id="persona-id" class="lt-id">ratan_hi_customer_expressive</code>
         <span class="lt-badge" aria-hidden="true">NEW HOST</span>
       </div>
     </div>
 
-    <!-- CC bar — captions of everything the host says; :empty hides itself -->
+    <!-- CC bar — captions of everything the host says; :empty hides itself, .cc-on shows accent -->
     <div id="cc-bar" role="status" aria-live="polite" aria-label="Host captions"></div>
 
-    <!-- Shy mode — typed answers when mic is denied/toggled; A10 removes [hidden] -->
+    <!-- Shy mode — typed answers when mic is denied; app.js removes [hidden] + adds .show -->
     <form id="type-fallback" hidden>
       <label class="type-label" for="type-input">माइक नहीं मिला? कोई बात नहीं — जवाब लिख दो</label>
       <div class="type-row">
@@ -201,7 +192,7 @@
       </div>
     </form>
 
-    <!-- Toast — :empty hides itself -->
+    <!-- Toast — :empty hides itself; app.js toggles .show -->
     <div id="toast" role="status" aria-live="polite"></div>
 
   </main>
