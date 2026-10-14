@@ -9,11 +9,30 @@
 // Worklet→main events:                first-frame | underrun | drained | stopped |
 //                                     overflow | samples | max
 //
+// FIX (feat/fix-audio — live bug: host voice "too fast, words inaudible/garbled"):
+//   F1 'chunk' frames go to an internal QUEUE; every render quantum pumps queue→ring
+//      as space frees. Audio is NEVER dropped on burst arrival. (The old drop-oldest
+//      overflow teleported the read cursor: a cached utterance dumps the whole blob
+//      in ~ms, so every chunk past the 3rd discarded unplayed audio — skipped words,
+//      torn-buffer garbage, utterance finished early = "too fast".)
+//   F2 the render loop FREEZES the play cursor (r+srcPos) when fewer than 2 source
+//      frames remain — it used to advance srcPos/r past w, permanently fast-forwarding
+//      past audio that arrived late. Starve→resume is now sample-exact and gapless.
+//   F3 150 ms start prime: playback goes audible only once ≥150 ms of source is
+//      buffered (or as soon as flush arrives) — absorbs WS/synthesis jitter with no
+//      mid-word gaps, fires no false underrun while priming, and reports first-frame
+//      at the first AUDIBLE sample. TTFB = first chunk (~25–100 ms) + ≤150 ms.
+//   F4 'stop'/'begin' leave zero dirty state between utterances (queue, ring, cursor
+//      and flags all reset); drained fires only when flush AND queue AND ring are
+//      fully exhausted.
+//
 // All PCM logic is exported as pure functions (no worklet globals needed) so
 // `node --test` exercises it headlessly; processor registration is guarded so
 // this file also evaluates outside an AudioWorkletGlobalScope.
 
-export const PLAYER_RING_FRAMES = 32768;    // src frames: 1.365 s @ 24 kHz, 64 KB (D7)
+export const PLAYER_RING_FRAMES = 32768;       // src frames: 1.365 s @ 24 kHz, 64 KB (D7)
+export const PLAYER_PRIME_MS = 150;             // start prefetch before going audible (F3)
+export const PLAYER_MAX_QUEUE_FRAMES = 720000;  // 30 s @ 24 kHz — runaway-server cap (F1)
 export const RECORDER_TARGET_RATE = 16000;  // answer WAV rate (contract §1)
 export const RECORDER_PREROLL_MS = 200;    // mic pre-roll discard (D4)
 export const RECORDER_MAX_MS = 8000;       // contract §2: 8 s hard auto-stop
@@ -23,17 +42,27 @@ export function clampInt16(v) { return v < -32768 ? -32768 : v > 32767 ? 32767 :
 
 // ------------------------------------------------------------------ bb-player
 
-/** Fresh player state. ctxRate = AudioContext rate, srcRate = PCM rate (24000). */
-export function createPlayerState(ctxRate, srcRate = 24000, ringFrames = PLAYER_RING_FRAMES) {
+/**
+ * Fresh player state. ctxRate = AudioContext rate, srcRate = PCM rate (24000).
+ * primeMs = start prefetch (F3): stay silent until this much source time is
+ * buffered (or flush arrives). Pass 0 to disable priming (headless tests).
+ */
+export function createPlayerState(ctxRate, srcRate = 24000, ringFrames = PLAYER_RING_FRAMES, primeMs = PLAYER_PRIME_MS) {
   const safeCtx = ctxRate > 0 ? ctxRate : 48000;
   const safeSrc = srcRate > 0 ? srcRate : 24000;
+  const safeRing = ringFrames > 0 ? ringFrames : PLAYER_RING_FRAMES;
+  const prime = Math.min(Math.max(0, Math.round((primeMs / 1000) * safeSrc)), safeRing >> 1);
   return {
-    ring: ringFrames,
-    buf: new Int16Array(ringFrames),
+    ring: safeRing,
+    buf: new Int16Array(safeRing),
     w: 0, r: 0,        // absolute write/read counters; ring index = counter % ring
-    srcPos: 0,          // fractional source-position accumulator
+    srcPos: 0,          // fractional source-position accumulator (carry across blocks)
     ratio: safeCtx / safeSrc,            // ctxRate/srcRate (e.g. ×2 @ 48 kHz) — informational
-    step: safeSrc / safeCtx,            // src frames advanced PER OUTPUT frame (the resample step)
+    step: safeSrc / safeCtx,            // src frames advanced PER OUTPUT frame (resample step)
+    q: [],             // pending source chunks (F1) — burst absorption, never dropped
+    qn: 0,             // frames currently queued (not yet in the ring)
+    prime,             // src frames to buffer before going audible (F3)
+    primed: false,      // this utterance has gone audible (F3)
     active: false,
     flushing: false,
     firstFrame: false,
@@ -43,50 +72,104 @@ export function createPlayerState(ctxRate, srcRate = 24000, ringFrames = PLAYER_
   };
 }
 
-/** Append Int16 source frames to the ring. Overflow drops oldest; returns dropped count. */
+/**
+ * Move queued frames into the ring as space frees (F1). Handles ring-index
+ * wraparound and partial chunk writes — the remainder stays queued.
+ * Returns the number of frames moved into the ring.
+ */
+export function playerPump(st) {
+  let moved = 0;
+  while (st.qn > 0) {
+    const free = st.ring - (st.w - st.r);
+    if (free <= 0) break;
+    const c = st.q[0];
+    const n = Math.min(c.length, free);
+    const start = st.w % st.ring;
+    if (start + n <= st.ring) {
+      st.buf.set(c.subarray(0, n), start);
+    } else {
+      const first = st.ring - start;
+      st.buf.set(c.subarray(0, first), start);
+      st.buf.set(c.subarray(first, n), 0);
+    }
+    st.w += n; moved += n; st.qn -= n;
+    if (n >= c.length) st.q.shift(); else st.q[0] = c.subarray(n);
+  }
+  return moved;
+}
+
+/**
+ * Append Int16 source frames (F1): enqueue, then pump whatever fits into the
+ * ring. Never drops frames unless the pending queue exceeds the runaway cap
+ * (30 s @ 24 kHz) — in that pathological case the NEWEST whole chunks are
+ * dropped and the dropped frame count is returned (→ 'overflow' event).
+ */
 export function playerWriteChunk(st, i16) {
   if (!i16 || i16.length === 0) return 0;
-  const n = i16.length;
-  const free = st.ring - (st.w - st.r);
+  st.q.push(i16);
+  st.qn += i16.length;
   let dropped = 0;
-  if (n > free) { dropped = n - free; st.r += dropped; }
-  const start = st.w % st.ring;
-  const first = Math.min(n, st.ring - start);
-  st.buf.set(i16.subarray(0, first), start);
-  if (first < n) st.buf.set(i16.subarray(first), 0);
-  st.w += n;
+  if (st.qn > PLAYER_MAX_QUEUE_FRAMES) {
+    while (st.qn > PLAYER_MAX_QUEUE_FRAMES && st.q.length > 1) {
+      const c = st.q.pop();
+      st.qn -= c.length;
+      dropped += c.length;
+    }
+  }
+  playerPump(st);
   return dropped;
+}
+
+/** Instant silence + zero dirty state between utterances (F4 — barge path). */
+export function playerReset(st) {
+  st.w = 0; st.r = 0; st.srcPos = 0;
+  st.q.length = 0; st.qn = 0;
+  st.active = false; st.flushing = false;
+  st.primed = false; st.dry = false; st.firstFrame = false;
 }
 
 /**
  * Render one block (out.length frames) from the ring, linear-interp resampling
- * srcRate→ctxRate. Underrun fills silence and keeps timing — never restarts (D7).
- * Returns { first, drySpell, drained }:
+ * srcRate→ctxRate. Underruns fill silence and keep timing — the play cursor
+ * FREEZES (F2) so late audio resumes sample-exactly; playback is never
+ * restarted and no source frame is ever skipped.
+ * Returns { first, drySpell, drained, rendered }:
  *   first    — first rendered frame of this utterance (→ post first-frame)
  *   drySpell — wet→dry transition while active & not flushing (→ post underrun,
- *              once per dry spell)
- *   drained  — flushing and ring empty (→ post drained; utterance complete)
+ *              once per dry spell; never fires while priming, F3)
+ *   drained  — flushing and queue+ring exhausted (→ post drained; complete)
+ *   rendered — output frames actually sourced from PCM this block (the rest are
+ *              gap silence) — lets tests stitch the gapless stream back together
  */
 export function playerRenderBlock(st, out) {
-  const avail = st.w - st.r;
-  if (avail <= 0) {
+  playerPump(st);
+  const avail = st.w - st.r;          // whole src frames in the ring
+  const pending = avail - st.srcPos;  // float src frames not yet rendered
+  // F3: stay silent (no underrun noise, no first-frame) until primed or flushed
+  if (st.active && !st.flushing && !st.primed && avail < st.prime) {
+    out.fill(0);
+    return { first: false, drySpell: false, drained: false, rendered: 0 };
+  }
+  st.primed = true;
+  // Need both interpolation taps (floor(p), floor(p)+1) inside written data:
+  // p + 1 < w means pending > 1. Below that: gap silence (F2 freeze) or drained.
+  if (pending <= 1) {
     out.fill(0);
     let drySpell = false;
     if (st.active && !st.flushing && !st.dry) { st.dry = true; drySpell = true; }
-    const drained = st.active && st.flushing;
+    const drained = st.active && st.flushing && st.qn === 0;
     if (drained) st.active = false;
-    return { first: false, drySpell, drained };
+    return { first: false, drySpell, drained, rendered: 0 };
   }
   st.dry = false;
   const ring = st.ring, buf = st.buf, step = st.step, g = st.gain;
-  const last = st.w - 1;
-  for (let i = 0; i < out.length; i++) {
+  let i = 0;
+  for (; i < out.length; i++) {
     const p = st.r + st.srcPos;
+    if (p + 1 >= st.w) break;              // F2: freeze cursor — resume sample-exact
     const i0 = Math.floor(p);
     const frac = p - i0;
-    let s;
-    if (i0 >= last) s = buf[last % ring];   // tail hold: never read stale ring data
-    else s = buf[i0 % ring] * (1 - frac) + buf[(i0 + 1) % ring] * frac;
+    const s = buf[i0 % ring] * (1 - frac) + buf[(i0 + 1) % ring] * frac;
     const v = (s / 32768) * g;
     out[i] = v < -1 ? -1 : v > 1 ? 1 : v;
     st.srcPos += step;   // srcRate/ctxRate src frames per output frame (0.5 @ 48k←24k)
@@ -94,9 +177,12 @@ export function playerRenderBlock(st, out) {
   const consumed = Math.floor(st.srcPos);
   st.r += consumed;
   st.srcPos -= consumed;
+  if (i < out.length) out.fill(0, i);      // starved tail of the block: gap silence
   const first = !st.firstFrame;
   st.firstFrame = true;
-  return { first, drySpell: false, drained: false };
+  let drySpell = false;
+  if (i < out.length && st.active && !st.flushing && !st.dry) { st.dry = true; drySpell = true; }
+  return { first, drySpell, drained: false, rendered: i };
 }
 
 // ---------------------------------------------------------------- bb-recorder
@@ -181,11 +267,9 @@ if (typeof registerProcessor === 'function' &&
             this.st.flushing = true;
             break;
           case 'stop': {
-            this.st.active = false;
-            this.st.flushing = false;
-            this.st.w = this.st.r = 0;
-            this.st.srcPos = 0;
-            this.port.postMessage({ ev: 'stopped', utteranceId: this.st.utteranceId });
+            const st = this.st;
+            playerReset(st);   // F4: instant silence, zero dirty state
+            this.port.postMessage({ ev: 'stopped', utteranceId: st.utteranceId });
             break;
           }
           case 'gain':
